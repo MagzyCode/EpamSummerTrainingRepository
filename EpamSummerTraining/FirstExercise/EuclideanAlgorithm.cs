@@ -1,17 +1,12 @@
-﻿using FirstTask;
-using System;
-using System.Collections;
-using System.Data;
+﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace EpamSummerTraining
 {
     /// <summary>
     /// Класс, предназначенный для вычисления НОД(GCD) чисел с применением алгоритма Евклида
     /// </summary>
-    public class EuclideanAlgorithm : IEuclideanAlgoritm
+    public class EuclideanAlgorithm
     {
         #region Constructors
         public EuclideanAlgorithm()
@@ -20,13 +15,49 @@ namespace EpamSummerTraining
         #endregion
 
         #region Methods
+
         /// <summary>
-        /// Метод получения НОД двух целых чисел методом Евклида
+        /// Метод выполняет подготовку данные для построения гистограммы,
+        /// сравнивающей время нахождения решения.
         /// </summary>
-        /// <param name="firstNumber"> Первое число для вычисления НОД </param>
-        /// <param name="secondNumber"> Второе число для вычисления НОД</param>
-        /// <param name="executionTime"> Время, затраченное на выполнение расчётов </param>
-        /// <returns></returns>
+        /// <param name="numberOfColumns">Количество столбцов гистограммы.</param>
+        /// <returns>
+        /// Возвращает время выполнения двух алгоритмов и значения, 
+        /// используемые этими алгоритмами. В случае задания числу столбцов
+        /// отрицательного значения, возращается null.
+        /// </returns>
+        public ((TimeSpan, TimeSpan)[], (int, int)[]) GetHistogramData(int numberOfColumns = 10)
+        {
+            if (numberOfColumns < 1)
+            {
+                return (default, default);
+            }
+            var timeOfAlgorithms = new (TimeSpan, TimeSpan)[numberOfColumns];
+            var valuesForGCD = new (int, int)[numberOfColumns];
+            var randomNumber = new Random();
+            for (int counter = 0; counter < numberOfColumns; counter--)
+            {
+                int firstNumber = randomNumber.Next(int.MaxValue);
+                int secondNumber = randomNumber.Next(int.MaxValue);
+                valuesForGCD[counter] = (firstNumber, secondNumber);
+                GetEuclideanGCD(firstNumber, secondNumber, out TimeSpan firstAlgorithmTime);
+                GetSteinitzGCD(firstNumber, secondNumber, out TimeSpan secondAlgorithmTime);
+                timeOfAlgorithms[counter] = (firstAlgorithmTime, secondAlgorithmTime);
+
+            }
+            return (timeOfAlgorithms, valuesForGCD);
+        }
+
+        /// <summary>
+        /// Метод получения НОД двух целых чисел методом Евклида.
+        /// </summary>
+        /// <param name="firstNumber"> Первое число для вычисления НОД.</param>
+        /// <param name="secondNumber"> Второе число для вычисления НОД.</param>
+        /// <param name="executionTime"> Время выполнения расчётов методом Евклида.</param>
+        /// <returns>
+        /// Возвращает НОД двух чисел и время, затраченное на расчёт НОД.
+        /// В случае неккоректных параметров возвращает значение -1.
+        /// </returns>
         public int GetEuclideanGCD(int firstNumber, int secondNumber, out TimeSpan executionTime)
         {
             var stopwatch = new Stopwatch();
@@ -38,12 +69,15 @@ namespace EpamSummerTraining
         }
 
         /// <summary>
-        /// Метод получение НОД двух целых чисел методом Стейница
+        /// Метод получение НОД двух целых чисел методом Стейница.
         /// </summary>
-        /// <param name="firstNumber"> Первое число для вычисления НОД </param>
-        /// <param name="secondNumber"> Второе число для вычисления НОД </param>
-        /// <param name="executionTime"> Время, затраченное на выполнение расчётов</param>
-        /// <returns></returns>
+        /// <param name="firstNumber"> Первое число для вычисления НОД.</param>
+        /// <param name="secondNumber"> Второе число для вычисления НОД.</param>
+        /// <param name="executionTime"> Время выполнения расчётов методом Стейница.</param>
+        /// <returns>
+        /// Возвращает НОД двух чисел и время, затраченное на расчёт НОД.
+        /// В случае неккоректных параметров возвращает значение -1.
+        /// </returns>
         public int GetSteinitzGCD(int firstNumber, int secondNumber, out TimeSpan executionTime)
         {
             var stopwatch = new Stopwatch();
@@ -55,15 +89,18 @@ namespace EpamSummerTraining
         }
 
         /// <summary>
-        /// Метод вычисления НОД для нескольких целых чисел
+        /// Метод вычисления НОД для нескольких целых чисел методом Евклида.
         /// </summary>
-        /// <param name="numbers"> Массив чисел для вычислениях их НОД </param>
-        /// <returns></returns>
+        /// <param name="numbers"> Массив значений для вычислениях НОД.</param>
+        /// <returns>
+        /// Возвращает НОД нескольких чисел.
+        /// В случае неккоректных параметров возвращает значение -1.
+        /// </returns>
         public int FindEuclideanGCD(params int[] numbers)
         {
             if (numbers.Length <= 1)
             {
-                return 0;
+                return -1;
             }
             var firstTwoNumbersGCD = FindEuclideanGCD(firstNumber: numbers[0], secondNumber: numbers[1]);
             for (int counter = 0; counter < numbers.Length - 2; counter++)
@@ -74,13 +111,20 @@ namespace EpamSummerTraining
         }
 
         /// <summary>
-        /// Метод вычисления НОД для двух целых чисел методом Евклида
+        /// Метод вычисления НОД для двух целых чисел методом Евклида.
         /// </summary>
         /// <param name="firstNumber"> Первое число для вычисления НОД </param>
         /// <param name="secondNumber"> Первое число для вычисления НОД </param>
-        /// <returns></returns>
+        /// <returns>
+        /// Возвращает НОД двух чисел.
+        /// В случае неккоректных входных параметров возвращается -1.
+        /// </returns>
         private int FindEuclideanGCD(int firstNumber, int secondNumber)
         {
+            if ((firstNumber < 0) || (secondNumber < 0))
+            {
+                return -1;
+            }
             while (firstNumber != 0 && secondNumber != 0)
             {
                 if (firstNumber > secondNumber)
@@ -97,14 +141,22 @@ namespace EpamSummerTraining
         }
 
         /// <summary>
-        /// Метод вычисления НОД для двух целых чисел методом Стейница
+        /// Метод вычисления НОД для двух целых чисел методом Стейница.
         /// </summary>
-        /// <param name="firstNumber"> Первое число для вычисления НОД </param>
-        /// <param name="secondNumber"> Первое число для вычисления НОД </param>
-        /// <returns></returns>
+        /// <param name="firstNumber">Первое число для вычисления НОД.</param>
+        /// <param name="secondNumber">Первое число для вычисления НОД.</param>
+        /// <returns>
+        /// Возвращает НОД двух целых чисел.
+        /// В случае неккоректных входных параметров возвращается -1.
+        /// </returns>
         private int FindSteinitzGCD(int firstNumber, int secondNumber)
         {
-            if ((firstNumber == 0) || (secondNumber == 0))
+            if ((firstNumber < 0) || (secondNumber < 0))
+            {
+                return -1;
+            }
+
+            if ((firstNumber <= 0) || (secondNumber <= 0))
             {
                 return 0;
             }
@@ -141,7 +193,7 @@ namespace EpamSummerTraining
             {
                 return FindSteinitzGCD(differenceOFNumbers, secondNumber);
             }
-            return FindSteinitzGCD(firstNumber, differenceOFNumbers);  
+            return FindSteinitzGCD(firstNumber, differenceOFNumbers);
         }
 
         #endregion
