@@ -6,8 +6,8 @@ namespace FirstTask.SecondExercise
 {
     public abstract class Figure
     {
-        private protected Lazy<Point[]> _points = default;
-        private protected Lazy<double[]> _sideSizes = default;
+        private protected Lazy<Point[]> _points = new Lazy<Point[]>();
+        private protected Lazy<double[]> _sideSizes = new Lazy<double[]>();
 
         public Point[] Points 
         {
@@ -25,12 +25,17 @@ namespace FirstTask.SecondExercise
             }
         }
 
-        public Figure(params Point[] points)
+        public Figure() 
+        { }
+
+        public Figure (Point[] points)
         {
             _points = new Lazy<Point[]>(points);
+            // var sideSizes = func?.Invoke();
+            // _sideSizes = new Lazy<double[]>(sideSizes);
         }
 
-        public Figure(params double[] sideSizes)
+        public Figure (double[] sideSizes)
         {
             _sideSizes = new Lazy<double[]>(sideSizes);
         }
@@ -38,6 +43,22 @@ namespace FirstTask.SecondExercise
         public abstract double GetAreaOfFigure();
 
         public abstract double GetPerimeterOfFigure();
+
+        private protected virtual double[] GetSideSizes()
+        {
+            var listOfSides = new List<double>();
+            for (int counter = 1; counter < Points.Length - 1; counter++)
+            {
+                var differenceAxisOrdinate = Math.Pow(Points[counter].OrdinateAxisValue -
+                    Points[counter + 1].OrdinateAxisValue, 2);
+                var differenceAxisAbscissa = Math.Pow(Points[counter].AbscissaAxisValue -
+                    Points[counter + 1].AbscissaAxisValue, 2);
+                var side = Math.Pow(differenceAxisAbscissa + differenceAxisOrdinate, 0.5);
+                listOfSides.Add(side);
+            }
+            var arrayOfSides = listOfSides.ToArray();
+            return arrayOfSides;
+        }
 
     }
 }
