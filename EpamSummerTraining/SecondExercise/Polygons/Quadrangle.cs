@@ -15,7 +15,8 @@ namespace FirstTask.SecondExercise.Polygons
 
         public override double GetAreaOfFigure()
         {
-            throw new NotImplementedException();
+            double area = SideSizes[0] * SideSizes[1];
+            return area;
         }
 
     }

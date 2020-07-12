@@ -18,22 +18,6 @@ namespace FirstTask.SecondExercise.Polygons
             _sideSizes = GetSideSizesFromPoints();
         }
 
-        public override double[] GetSideSizesFromPoints()
-        {
-            var listOfSides = new List<double>();
-            for (int counter = 1; counter < Points.Length - 1; counter++)
-            {
-                var differenceAxisOrdinate = Math.Pow(Points[counter].OrdinateAxisValue -
-                    Points[counter + 1].OrdinateAxisValue, 2);
-                var differenceAxisAbscissa = Math.Pow(Points[counter].AbscissaAxisValue -
-                    Points[counter + 1].AbscissaAxisValue, 2);
-                var side = Math.Pow(differenceAxisAbscissa + differenceAxisOrdinate, 0.5);
-                listOfSides.Add(side);
-            }
-            var arrayOfSides = listOfSides.ToArray();
-            return arrayOfSides;
-        }
-
         public override double GetPerimeterOfFigure()
         {
             double perimeter = _sideSizes.Sum();

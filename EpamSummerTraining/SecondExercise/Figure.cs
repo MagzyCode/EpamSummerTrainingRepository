@@ -32,8 +32,6 @@ namespace FirstTask.SecondExercise
         public Figure (Point[] points)
         {
             _points = new Lazy<Point[]>(points);
-            // var sideSizes = func?.Invoke();
-            // _sideSizes = new Lazy<double[]>(sideSizes);
         }
 
         public Figure (double[] sideSizes)
@@ -42,26 +40,27 @@ namespace FirstTask.SecondExercise
         }
 
         public abstract double GetAreaOfFigure();
-        public abstract double[] GetSideSizesFromPoints();
         public abstract double GetPerimeterOfFigure();
+        public double[] GetSideSizesFromPoints()
+        {
+            var listOfSides = new List<double>();
+            for (int counter = 0; counter < Points.Length - 1; counter++)
+            {
+                double side = GetLengthBetweenPoints(Points[counter], Points[counter + 1]);
+                listOfSides.Add(side);
+            }
+            var arrayOfSides = listOfSides.ToArray();
+            return arrayOfSides;
+        }
 
-        
-
-        //private protected virtual double[] GetSideSizes()
-        //{
-        //    var listOfSides = new List<double>();
-        //    for (int counter = 1; counter < Points.Length - 1; counter++)
-        //    {
-        //        var differenceAxisOrdinate = Math.Pow(Points[counter].OrdinateAxisValue -
-        //            Points[counter + 1].OrdinateAxisValue, 2);
-        //        var differenceAxisAbscissa = Math.Pow(Points[counter].AbscissaAxisValue -
-        //            Points[counter + 1].AbscissaAxisValue, 2);
-        //        var side = Math.Pow(differenceAxisAbscissa + differenceAxisOrdinate, 0.5);
-        //        listOfSides.Add(side);
-        //    }
-        //    var arrayOfSides = listOfSides.ToArray();
-        //    return arrayOfSides;
-        //}
-
+        public static double GetLengthBetweenPoints(Point startPoint, Point finishPoint)
+        {
+            var differenceAxisOrdinate = Math.Pow(startPoint.OrdinateAxisValue -
+                    finishPoint.OrdinateAxisValue, 2);
+            var differenceAxisAbscissa = Math.Pow(startPoint.AbscissaAxisValue -
+                finishPoint.AbscissaAxisValue, 2);
+            var side = Math.Pow(differenceAxisAbscissa + differenceAxisOrdinate, 0.5);
+            return side;
+        }
     }
 }

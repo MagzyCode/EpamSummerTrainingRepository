@@ -22,11 +22,5 @@ namespace FirstTask.SecondExercise
             var area = Math.Pow(tempResult, 0.5);
             return area;
         }
-
-        //public override double GetPerimeterOfFigure()
-        //{
-        //    double perimeter = _sideSizes.Sum();
-        //    return perimeter;
-        //}
     }
 }
