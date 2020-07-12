@@ -20,5 +20,10 @@ namespace FirstTask.SecondExercise
             OrdinateAxisValue = yPoint;
             AbscissaAxisValue = xPoint;
         }
+
+        public override string ToString()
+        {
+            return  $"({AbscissaAxisValue}, {OrdinateAxisValue})";
+        }
     }
 }

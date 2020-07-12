@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,14 +8,14 @@ namespace FirstTask.SecondExercise
 {
     public abstract class Figure
     {
-        private protected Lazy<Point[]> _points = new Lazy<Point[]>();
+        private protected Point[] _points = default;
         private protected double[] _sideSizes = default;
 
         public Point[] Points 
         {
             get
             {
-                return _points.Value;
+                return _points;
             }
         }
 
@@ -31,7 +32,7 @@ namespace FirstTask.SecondExercise
 
         public Figure (Point[] points)
         {
-            _points = new Lazy<Point[]>(points);
+            _points = points;
         }
 
         public Figure (double[] sideSizes)
@@ -43,10 +44,11 @@ namespace FirstTask.SecondExercise
         public abstract double GetPerimeterOfFigure();
         public double[] GetSideSizesFromPoints()
         {
-            var listOfSides = new List<double>();
+            double side = GetLengthBetweenPoints(_points[Points.Length - 1], _points[0]);
+            var listOfSides = new List<double> { side };
             for (int counter = 0; counter < Points.Length - 1; counter++)
             {
-                double side = GetLengthBetweenPoints(Points[counter], Points[counter + 1]);
+                side = GetLengthBetweenPoints(_points[counter], _points[counter + 1]);
                 listOfSides.Add(side);
             }
             var arrayOfSides = listOfSides.ToArray();
@@ -61,6 +63,13 @@ namespace FirstTask.SecondExercise
                 finishPoint.AbscissaAxisValue, 2);
             var side = Math.Pow(differenceAxisAbscissa + differenceAxisOrdinate, 0.5);
             return side;
+        }
+
+        public override string ToString()
+        {
+            string stringOfPoints = _points == null ? string.Empty : ("Points: " + String.Join<Point>(' ', _points));
+            string stringOfSides = String.Join(' ', _sideSizes);
+            return $" Type: {this.GetType().Name} \n Sides: {stringOfSides} \n {stringOfPoints}";
         }
     }
 }

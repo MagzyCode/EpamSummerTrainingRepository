@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FirstTask.SecondExercise.SmoothCurves
 {
-    class Circle : Figure
+    public class Circle : Figure
     {
         private double _radius = default;
 
@@ -23,16 +23,24 @@ namespace FirstTask.SecondExercise.SmoothCurves
             }
         }
 
+        public double Diameter
+        {
+            get
+            {
+                return 2 * _radius; 
+            }
+        }
+
         public Circle(Point firstPoint, Point secondPoint)
         {
-            _points = new Lazy<Point[]>(new Point[] { firstPoint, secondPoint });
+            _points = new Point[] { firstPoint, secondPoint };
             _sideSizes = GetSideSizesFromPoints();
             _radius = GetRadius();
         }
 
         public Circle(Point center, double raduis)
         {
-            _points = new Lazy<Point[]>(new Point[] { center });
+            _points = new Point[] { center };
             _radius = raduis;
         }
 

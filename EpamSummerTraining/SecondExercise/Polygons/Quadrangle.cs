@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FirstTask.SecondExercise.Polygons
 {
-    class Quadrangle : PolygonFigure
+    public class Quadrangle : PolygonFigure
     {
 
         public Quadrangle(double[] sideSizes) : base(sideSizes)
@@ -19,5 +20,10 @@ namespace FirstTask.SecondExercise.Polygons
             return area;
         }
 
+        public override double GetPerimeterOfFigure()
+        {
+            double perimeter = _sideSizes.Sum() * 2;
+            return perimeter;
+        }
     }
 }

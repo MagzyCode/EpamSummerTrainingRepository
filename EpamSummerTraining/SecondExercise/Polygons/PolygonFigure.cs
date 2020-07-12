@@ -16,12 +16,12 @@ namespace FirstTask.SecondExercise.Polygons
         public PolygonFigure(Point[] points) : base(points) 
         {
             _sideSizes = GetSideSizesFromPoints();
-        }
+        } 
 
-        public override double GetPerimeterOfFigure()
-        {
-            double perimeter = _sideSizes.Sum();
-            return perimeter;
-        }
+        //public override double GetPerimeterOfFigure()
+        //{
+        //    double perimeter = _sideSizes.Sum();
+        //    return perimeter;
+        //}
     }
 }

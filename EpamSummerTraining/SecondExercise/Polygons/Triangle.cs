@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FirstTask.SecondExercise
 {
-    class Triangle : Polygons.PolygonFigure
+    public class Triangle : Polygons.PolygonFigure
     {
         
         public Triangle(double[] sideSizes) : base(sideSizes)
@@ -21,6 +21,12 @@ namespace FirstTask.SecondExercise
                     (halfOfPerimeter - SideSizes[1]) * (halfOfPerimeter - SideSizes[2]);
             var area = Math.Pow(tempResult, 0.5);
             return area;
+        }
+
+        public override double GetPerimeterOfFigure()
+        {
+            double perimeter = _sideSizes.Sum();
+            return perimeter;
         }
     }
 }
