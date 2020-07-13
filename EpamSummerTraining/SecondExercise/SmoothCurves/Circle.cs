@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
 namespace FirstTask.SecondExercise.SmoothCurves
@@ -25,10 +26,22 @@ namespace FirstTask.SecondExercise.SmoothCurves
 
         public double Diameter
         {
+            
             get
             {
                 return 2 * _radius; 
             }
+        }
+
+        public Circle()
+        { }
+
+
+        public Circle(Point[] points)
+        {
+            _points = points;
+            _sideSizes = GetSideSizesFromPoints();
+            _radius = GetRadius();
         }
 
         public Circle(Point firstPoint, Point secondPoint)
@@ -42,6 +55,7 @@ namespace FirstTask.SecondExercise.SmoothCurves
         {
             _points = new Point[] { center };
             _radius = raduis;
+            _sideSizes = new double[] { _radius * 2 };
         }
 
         public override double GetAreaOfFigure()
@@ -58,7 +72,7 @@ namespace FirstTask.SecondExercise.SmoothCurves
 
         private double GetRadius()
         {
-            double radius = Figure.GetLengthBetweenPoints(Points[0], Points[1]) / 2;
+            double radius = _sideSizes[0] / 2;
             return radius;
         }
     }

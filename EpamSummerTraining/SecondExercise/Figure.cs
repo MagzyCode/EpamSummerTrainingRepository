@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FirstTask.SecondExercise
 {
@@ -17,6 +14,10 @@ namespace FirstTask.SecondExercise
             {
                 return _points;
             }
+            set
+            {
+                _points = value;
+            }
         }
 
         public double[] SideSizes
@@ -24,6 +25,10 @@ namespace FirstTask.SecondExercise
             get
             {
                 return _sideSizes;
+            }
+            set
+            {
+                _sideSizes = value;
             }
         }
 
@@ -70,6 +75,22 @@ namespace FirstTask.SecondExercise
             string stringOfPoints = _points == null ? string.Empty : ("Points: " + String.Join<Point>(' ', _points));
             string stringOfSides = String.Join(' ', _sideSizes);
             return $" Type: {this.GetType().Name} \n Sides: {stringOfSides} \n {stringOfPoints}";
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            var figure = obj as Figure;
+            var isAreaEquals = GetAreaOfFigure() == figure.GetAreaOfFigure();
+            return isAreaEquals;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace FirstTask.SecondExercise.Polygons
     {
         private const int NUMBER_OF_MINIMUM_POINTS = 3;
 
-        public Polygon(params Point[] points) : base(points)
+        public Polygon(Point[] points) : base(points)
         { }
 
         public Polygon(double[] sides) : base(sides)
