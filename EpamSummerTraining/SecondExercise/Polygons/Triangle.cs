@@ -5,12 +5,19 @@ using System.Text;
 
 namespace FirstTask.SecondExercise
 {
-    public class Triangle : Polygons.PolygonFigure
+    public class Triangle : Figure
     {
-        
+        /// <summary>
+        /// Инициализирует объект типа Triangle, используя значения сторон.
+        /// </summary>
+        /// <param name="sideSizes">Массив сторон треугольника</param>
         public Triangle(double[] sideSizes) : base(sideSizes)
         { }
 
+        /// <summary>
+        /// Инициализирует объект типа Triangle, используя вершины треугольника.
+        /// </summary>
+        /// <param name="points"></param>
         public Triangle(Point[] points) : base(points) 
         { }
 

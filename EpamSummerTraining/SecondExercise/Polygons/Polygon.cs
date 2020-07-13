@@ -4,13 +4,21 @@ using System.Linq;
 
 namespace FirstTask.SecondExercise.Polygons
 {
-    public class Polygon : PolygonFigure
+    public class Polygon : Figure
     {
         private const int NUMBER_OF_MINIMUM_POINTS = 3;
 
+        /// <summary>
+        /// Инициализирует объект типа Polygon, использую значение вершин n-угольника.
+        /// </summary>
+        /// <param name="points">Значения вершин n-угольника.</param>
         public Polygon(Point[] points) : base(points)
         { }
 
+        /// <summary>
+        /// Инициализирует объект типа Polygon, использую значение сторон n-угольника.
+        /// </summary>
+        /// <param name="sides"></param>
         public Polygon(double[] sides) : base(sides)
         { }
 

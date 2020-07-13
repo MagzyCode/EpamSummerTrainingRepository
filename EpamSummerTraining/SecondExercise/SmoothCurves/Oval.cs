@@ -7,9 +7,13 @@ namespace FirstTask.SecondExercise.SmoothCurves
 {
     public class Oval : Figure
     {
-        private double _smallDiameter = default;
-        private double _bigDiameter = default;
+        private readonly double _smallDiameter = default;
+        private readonly double _bigDiameter = default;
 
+        /// <summary>
+        /// Конструктор создания фигуры "Овал", использую массив точек.
+        /// </summary>
+        /// <param name="points">Точки прямоугольника, в который вписывается овал</param>
         public Oval(Point[] points)
         {
             _points = points;
@@ -18,6 +22,13 @@ namespace FirstTask.SecondExercise.SmoothCurves
             _bigDiameter = _sideSizes[0];
         }
 
+        /// <summary>
+        /// Конструктор создания овала, использующий центральную 
+        /// точку и значения перпендикулярных радиусов.
+        /// </summary>
+        /// <param name="centerPoint">Точка-центр овала.</param>
+        /// <param name="smallRadius">Малый радиус овала.</param>
+        /// <param name="bigRadius">Большой радиус овала.</param>
         public Oval(Point centerPoint, double smallRadius, double bigRadius)
         {
             _points = new Point[] { centerPoint };
@@ -25,7 +36,6 @@ namespace FirstTask.SecondExercise.SmoothCurves
             _bigDiameter = bigRadius;
             _sideSizes = new double[] { _smallDiameter, _bigDiameter };
         }
-
 
 
         public override double GetAreaOfFigure()
@@ -40,6 +50,10 @@ namespace FirstTask.SecondExercise.SmoothCurves
             return perimeter;
         }
 
+        /// <summary>
+        /// Преобразует значения точек в свойстве Points в малый и большой радиусы овала.
+        /// </summary>
+        /// <returns>Возвращает массив сторон(диаметров) овала</returns>
         private double[] GetOvalSides()
         {
             var sides = new double[]

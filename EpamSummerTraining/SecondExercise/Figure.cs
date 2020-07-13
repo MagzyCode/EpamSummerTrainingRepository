@@ -5,9 +5,13 @@ namespace FirstTask.SecondExercise
 {
     public abstract class Figure
     {
+
         private protected Point[] _points = default;
         private protected double[] _sideSizes = default;
 
+        /// <summary>
+        /// Массив точек фигуры.
+        /// </summary>
         public Point[] Points 
         {
             get
@@ -19,7 +23,9 @@ namespace FirstTask.SecondExercise
                 _points = value;
             }
         }
-
+        /// <summary>
+        /// Массив длин сторон фигуры.
+        /// </summary>
         public double[] SideSizes
         {
             get
@@ -35,18 +41,41 @@ namespace FirstTask.SecondExercise
         public Figure() 
         { }
 
+        /// <summary>
+        /// Конструктор создания фигуры по значению вершин фигуры.
+        /// </summary>
+        /// <param name="points">Массив вершин фигуры.</param>
         public Figure (Point[] points)
         {
             _points = points;
+            _sideSizes = GetSideSizesFromPoints();
         }
 
+        /// <summary>
+        /// Конструктор создания фигуры по значению сторон фигуры.
+        /// </summary>
+        /// <param name="sideSizes">Массив значений сторон фигуры.</param>
         public Figure (double[] sideSizes)
         {
             _sideSizes = sideSizes;
         }
 
+        /// <summary>
+        /// Получает площадь фигуры.
+        /// </summary>
+        /// <returns>Возвращает площадь фигуры.</returns>
         public abstract double GetAreaOfFigure();
+
+        /// <summary>
+        /// Получает периметр фигуры.
+        /// </summary>
+        /// <returns>Возвращает периметр фигуры.</returns>
         public abstract double GetPerimeterOfFigure();
+
+        /// <summary>
+        /// Получает массив значений сторон фигуры, основываясь на вершинах фигуры.
+        /// </summary>
+        /// <returns>Возвращает массив значений сторон фигуры.</returns>
         public double[] GetSideSizesFromPoints()
         {
             double side = GetLengthBetweenPoints(_points[Points.Length - 1], _points[0]);
@@ -60,6 +89,12 @@ namespace FirstTask.SecondExercise
             return arrayOfSides;
         }
 
+        /// <summary>
+        /// Получает расстояние между двумя точками в пространстве.
+        /// </summary>
+        /// <param name="startPoint">Начальная точка отрезка.</param>
+        /// <param name="finishPoint">Конечная точка отрезка.</param>
+        /// <returns>Возвращает расстояние между точками.</returns>
         public static double GetLengthBetweenPoints(Point startPoint, Point finishPoint)
         {
             var differenceAxisOrdinate = Math.Pow(startPoint.OrdinateAxisValue -
@@ -82,6 +117,11 @@ namespace FirstTask.SecondExercise
             return HashCode.Combine(this);
         }
 
+        /// <summary>
+        /// Сравнивает две фигуры основываячь на их типе и площади.
+        /// </summary>
+        /// <param name="obj">Фигура для сравнения.</param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())

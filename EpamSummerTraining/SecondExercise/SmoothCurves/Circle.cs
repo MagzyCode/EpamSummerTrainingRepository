@@ -7,8 +7,14 @@ namespace FirstTask.SecondExercise.SmoothCurves
 {
     public class Circle : Figure
     {
+        /// <summary>
+        /// Значение радиуса круга
+        /// </summary>
         private double _radius = default;
 
+        /// <summary>
+        /// Значение радиуса круга
+        /// </summary>
         public double Radius
         {
             private get
@@ -24,9 +30,11 @@ namespace FirstTask.SecondExercise.SmoothCurves
             }
         }
 
+        /// <summary>
+        /// Значение диаметра круга
+        /// </summary>
         public double Diameter
         {
-            
             get
             {
                 return 2 * _radius; 
@@ -36,7 +44,11 @@ namespace FirstTask.SecondExercise.SmoothCurves
         public Circle()
         { }
 
-
+        /// <summary>
+        /// Инициализирует сущность Circle, использую точки произвольной линии
+        /// в качестве диаметра круга.
+        /// </summary>
+        /// <param name="points">Точки произвольной линии, берущейся в качестве диаметра круга</param>
         public Circle(Point[] points)
         {
             _points = points;
@@ -44,13 +56,12 @@ namespace FirstTask.SecondExercise.SmoothCurves
             _radius = GetRadius();
         }
 
-        public Circle(Point firstPoint, Point secondPoint)
-        {
-            _points = new Point[] { firstPoint, secondPoint };
-            _sideSizes = GetSideSizesFromPoints();
-            _radius = GetRadius();
-        }
-
+        /// <summary>
+        /// Инициализирует сущность Circle, используя точку в качестве центра круга,
+        /// также инициализируя его радиус
+        /// </summary>
+        /// <param name="center">Центральная точка круга</param>
+        /// <param name="raduis">Радиус круга</param>
         public Circle(Point center, double raduis)
         {
             _points = new Point[] { center };
@@ -70,6 +81,10 @@ namespace FirstTask.SecondExercise.SmoothCurves
             return perimeter;
         }
 
+        /// <summary>
+        /// Метод получения радиуса, использующий значение диагонали
+        /// </summary>
+        /// <returns>Получает радиус круга из его диаметра</returns>
         private double GetRadius()
         {
             double radius = _sideSizes[0] / 2;
