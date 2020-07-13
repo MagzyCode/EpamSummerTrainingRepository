@@ -96,7 +96,7 @@ namespace EpamSummerTraining
         /// Возвращает НОД нескольких чисел.
         /// В случае неккоректных параметров возвращает значение -1.
         /// </returns>
-        public int FindEuclideanGCD(params int[] numbers)
+        public int GetEuclideanGCD(params int[] numbers)
         {
             if (numbers.Length <= 1)
             {
@@ -125,6 +125,12 @@ namespace EpamSummerTraining
             {
                 return -1;
             }
+
+            if (firstNumber == 0 || secondNumber == 0)
+            {
+                return 0;
+            }
+
             while (firstNumber != 0 && secondNumber != 0)
             {
                 if (firstNumber > secondNumber)
@@ -133,7 +139,7 @@ namespace EpamSummerTraining
                 }
                 else
                 {
-                    secondNumber %= secondNumber;
+                    secondNumber %= firstNumber;
                 }
             }
             var result = firstNumber + secondNumber;
