@@ -46,7 +46,9 @@ namespace FirstTask.SecondExercise.SmoothCurves
 
         public override double GetPerimeterOfFigure()
         {
-            var perimeter = Math.PI * (_smallDiameter + _bigDiameter);
+            var rootPartOfFormula = (_bigDiameter * _bigDiameter +
+                    _smallDiameter * _smallDiameter) / 8;
+            var perimeter = 2 * Math.PI * Math.Pow(rootPartOfFormula, 0.5);
             return perimeter;
         }
 
@@ -56,12 +58,15 @@ namespace FirstTask.SecondExercise.SmoothCurves
         /// <returns>Возвращает массив сторон(диаметров) овала</returns>
         private double[] GetOvalSides()
         {
-            var sides = new double[]
+            var axisValues = Figure.GetDifferenceOfAxis(Points[0], Points[1]);
+            if (axisValues.xDifferenct > axisValues.yDifference)
             {
-                Math.Abs(Points[1].AbscissaAxisValue - Points[0].AbscissaAxisValue),
-                Math.Abs(Points[1].OrdinateAxisValue - Points[0].OrdinateAxisValue),
-            };
-            return sides;
+                return new double[] { axisValues.xDifferenct, axisValues.yDifference };
+            }
+            else
+            {
+                return new double[] { axisValues.yDifference, axisValues.xDifferenct };
+            }
         }
 
     }

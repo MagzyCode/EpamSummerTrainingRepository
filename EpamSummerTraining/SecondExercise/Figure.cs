@@ -78,12 +78,16 @@ namespace FirstTask.SecondExercise
         /// <returns>Возвращает массив значений сторон фигуры.</returns>
         public double[] GetSideSizesFromPoints()
         {
+            // Соединяем первую и последнюю точку
             double side = GetLengthBetweenPoints(_points[Points.Length - 1], _points[0]);
             var listOfSides = new List<double> { side };
-            for (int counter = 0; counter < Points.Length - 1; counter++)
+            if (Points.Length >= 2)
             {
-                side = GetLengthBetweenPoints(_points[counter], _points[counter + 1]);
-                listOfSides.Add(side);
+                for (int counter = 0; counter < Points.Length - 1; counter++)
+                {
+                    side = GetLengthBetweenPoints(_points[counter], _points[counter + 1]);
+                    listOfSides.Add(side);
+                }
             }
             var arrayOfSides = listOfSides.ToArray();
             return arrayOfSides;
@@ -97,12 +101,18 @@ namespace FirstTask.SecondExercise
         /// <returns>Возвращает расстояние между точками.</returns>
         public static double GetLengthBetweenPoints(Point startPoint, Point finishPoint)
         {
-            var differenceAxisOrdinate = Math.Pow(startPoint.OrdinateAxisValue -
-                    finishPoint.OrdinateAxisValue, 2);
-            var differenceAxisAbscissa = Math.Pow(startPoint.AbscissaAxisValue -
-                finishPoint.AbscissaAxisValue, 2);
-            var side = Math.Pow(differenceAxisAbscissa + differenceAxisOrdinate, 0.5);
+            var axisValues = GetDifferenceOfAxis(startPoint, finishPoint);
+            var squareXDifference = Math.Pow(axisValues.xDifferenct, 2);
+            var squareYDifference = Math.Pow(axisValues.yDifference, 2);
+            var side = Math.Pow(squareXDifference + squareYDifference, 0.5);
             return side;
+        }
+
+        public static (double xDifferenct, double yDifference) GetDifferenceOfAxis(Point startPoint, Point finishPoint)
+        {
+            var yDifference = Math.Abs(startPoint.OrdinateAxisValue - finishPoint.OrdinateAxisValue);
+            var xDifference = Math.Abs(startPoint.AbscissaAxisValue - finishPoint.AbscissaAxisValue);
+            return (xDifference, yDifference);
         }
 
         public override string ToString()

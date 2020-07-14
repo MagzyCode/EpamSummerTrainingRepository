@@ -24,13 +24,15 @@ namespace FirstTask.SecondExercise.Polygons
 
         public override double GetAreaOfFigure()
         {
-            double area = SideSizes[0] * SideSizes[1];
+            var axisValues = Figure.GetDifferenceOfAxis(_points[0], _points[1]);
+            var area = (axisValues.xDifferenct * axisValues.yDifference);
             return area;
         }
 
         public override double GetPerimeterOfFigure()
         {
-            double perimeter = _sideSizes.Sum() * 2;
+            var axisValues = Figure.GetDifferenceOfAxis(_points[0], _points[1]);
+            var perimeter = 2 * (axisValues.xDifferenct + axisValues.yDifference);
             return perimeter;
         }
     }

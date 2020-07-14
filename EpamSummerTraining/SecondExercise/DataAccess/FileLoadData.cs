@@ -72,7 +72,7 @@ namespace FirstTask.SecondExercise
         /// </summary>
         /// <param name="figure">Перечисление по состоянмю фигуры</param>
         /// <param name="points">Точки вершин для инициализации фигуры</param>
-        /// <returns>Возвращет фигуруа</returns>
+        /// <returns>Возвращет тип фигура</returns>
         private Figure CreateFigure(FigureEnum figure, Point[] points) => figure switch
         {
             FigureEnum.Circle => new Circle(points),
