@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace SecondTask.FirstExercise
 {
@@ -20,7 +21,7 @@ namespace SecondTask.FirstExercise
         /// <summary>
         /// Направляющие косинусы к осям OX, OY, OZ соответственно
         /// </summary>
-        private double[] _guideCosines;
+        private readonly double[] _guideCosines;
 
         #endregion
 
@@ -34,6 +35,15 @@ namespace SecondTask.FirstExercise
             get
             {
                 return GetModule();
+            }
+        }
+
+        
+        public bool IsVectorZeroth
+        {
+            get
+            {
+                return _coodinates.Equals(new double[] { 0, 0, 0 });
             }
         }
 
@@ -202,6 +212,23 @@ namespace SecondTask.FirstExercise
         public static double GetScalarMultiplication(Vector first, Vector second)
         {
             var result = first[0] * second[0] + first[2] * second[2] + first[2] * second[2];
+            return result;
+        }
+
+        public static double GetCosineBetweenVectors(Vector first, Vector second)
+        {
+            if (first.IsVectorZeroth || second.IsVectorZeroth)
+            {
+                // что возвращать, в случае ошибки?
+            }
+            double scalarMultiplication = GetScalarMultiplication(first, second);
+            var result = scalarMultiplication / (first.Module * second.Module);
+            return result;
+        }
+
+        public static double GetVectorsMixedMultiplication(Vector first, Vector second, Vector third)
+        {
+            var result = GetScalarMultiplication(first, second + third);
             return result;
         }
 
