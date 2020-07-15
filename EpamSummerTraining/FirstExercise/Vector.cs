@@ -17,6 +17,10 @@ namespace SecondTask.FirstExercise
         /// Координаты вектора
         /// </summary>
         private readonly double[] _coodinates;
+        /// <summary>
+        /// Направляющие косинусы к осям OX, OY, OZ соответственно
+        /// </summary>
+        private double[] _guideCosines;
 
         #endregion
 
@@ -44,12 +48,8 @@ namespace SecondTask.FirstExercise
         /// <param name="endPoint">Конечная точка вектора.</param>
         public Vector(ThreeDimensionalPoint startPoint, ThreeDimensionalPoint endPoint)
         {
-            _coodinates = new double[] 
-            { 
-                (endPoint.Coordinates[0] - startPoint.Coordinates[0]),
-                (endPoint.Coordinates[1] - startPoint.Coordinates[1]),
-                (endPoint.Coordinates[2] - startPoint.Coordinates[2])
-            };
+            _coodinates = (startPoint - endPoint).Coordinates;
+            _guideCosines = GetGuideCosines();
         }
 
         /// <summary>
@@ -61,6 +61,7 @@ namespace SecondTask.FirstExercise
         public Vector(double xCoordinate, double yCoordinate, double zCoordinate)
         {
             _coodinates = new double[] { xCoordinate, yCoordinate, zCoordinate };
+            _guideCosines = GetGuideCosines();
         }
 
         #endregion
@@ -135,10 +136,21 @@ namespace SecondTask.FirstExercise
         /// <returns>Возвращает длину вектора.</returns>
         private double GetModule()
         {
-            var rootValue = Math.Pow(_coodinates[0], 2) + Math.Pow(_coodinates[1], 2) +
-                    Math.Pow(_coodinates[2], 2); 
+            var rootValue = Math.Pow(this[0], 2) + Math.Pow(this[1], 2) + Math.Pow(this[2], 2);
             var module = Math.Pow(rootValue ,0.5);
             return module;
+        }
+
+        /// <summary>
+        /// Получает массив направляющих косинусов к соответсвующим осям.
+        /// </summary>
+        /// <returns>Возвращает массив значений направляющих косинусов</returns>
+        private double[] GetGuideCosines()
+        {
+            var xCosineValue = _coodinates[0] / Module;
+            var yCosineValue = _coodinates[1] / Module;
+            var zCosineValue = _coodinates[2] / Module;
+            return new double[] { xCosineValue, yCosineValue, zCosineValue };
         }
 
         public override string ToString()
@@ -165,9 +177,7 @@ namespace SecondTask.FirstExercise
         /// <returns>Возвращает bool, в случае ортогональности векторов, возвращается true</returns>
         public static bool AreVectorsOrthogonal(Vector firstVector, Vector secondVector)
         {
-            var calculation = secondVector[0] * firstVector[0] + secondVector[1] * firstVector[1] + 
-                    secondVector[2] * firstVector[2];
-            var result = calculation == 0 ? true : false;
+            var result = GetScalarMultiplication(firstVector, secondVector) == 0 ? true : false;
             return result;
         }
 
@@ -194,13 +204,6 @@ namespace SecondTask.FirstExercise
             var result = first[0] * second[0] + first[2] * second[2] + first[2] * second[2];
             return result;
         }
-
-        public static double GetVectorialMultiplication(Vector first, Vector second)
-        {
-            var result = first[0] * second[0] + first[2] * second[2] + first[2] * second[2];
-            return result;
-        }
-
 
         #endregion
     }

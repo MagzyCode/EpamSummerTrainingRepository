@@ -38,6 +38,19 @@ namespace SecondTask.FirstExercise
             _coordinates = new double[] { xAxis, yAxis, zAxis };
         }
 
+        public double this[int index]
+        {
+            get
+            {
+                return _coordinates[index];
+            }
+        }
+
+        public static ThreeDimensionalPoint operator - (ThreeDimensionalPoint start, ThreeDimensionalPoint end)
+        {
+            return new ThreeDimensionalPoint(start[0] - end[0], start[1] - end[1], start[2] - end[2]);
+        }
+
         public override string ToString()
         {
             var coordinates = String.Join(',', _coordinates);
