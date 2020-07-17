@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text;
+using System.Threading.Tasks.Sources;
 
 namespace SecondTask.SecondExercise
 {
@@ -11,21 +13,20 @@ namespace SecondTask.SecondExercise
         /// <summary>
         /// Коэффициенты полинома по возрастанию.
         /// </summary>
-        private readonly double[] _coefficients;
+        private double[] _coefficients;
 
         #endregion
 
         #region Constructors
 
-        /// <summary>
-        /// Коэффициенты полинома по возрастанию.
-        /// </summary>
-        public double[] Coefficients
+        public Polynomial(int degree)
         {
-            get
-            {
-                return _coefficients.Clone() as double[];
-            }
+            _coefficients = degree < 0 ? throw new ArgumentOutOfRangeException() : new double[degree];
+        }
+
+        public Polynomial(params double[] coefficients)
+        {
+            _coefficients = coefficients ?? throw new NullReferenceException();
         }
 
         #endregion
@@ -59,6 +60,24 @@ namespace SecondTask.SecondExercise
             }
         }
 
+        /// <summary>
+        /// Коэффициенты полинома по возрастанию.
+        /// </summary>
+        public double[] Coefficients
+        {
+            get
+            {
+                return _coefficients.Clone() as double[];
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _coefficients = value;
+                }
+            }
+        }
+
 
         #endregion
 
@@ -74,7 +93,17 @@ namespace SecondTask.SecondExercise
 
         #region Operations
 
-        public 
+        public static Polynomial operator + (Polynomial firstValue, Polynomial secondValue)
+        {
+            var maxDegree = Math.Max(firstValue.Degree, secondValue.Degree);
+            var result = new Polynomial(maxDegree);
+            var minDegree = Math.Min(firstValue.Degree, secondValue.Degree);
+            for (int i = 0; i < minDegree; i++)
+            {
+                result[i] = firstValue[i] + secondValue[i];
+            }
+            return result;
+        }
 
         #endregion
 
