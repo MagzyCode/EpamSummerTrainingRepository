@@ -18,4 +18,8 @@
     <Folder Include="TestThirdExercise\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EpamSummerTraining\SecondTask.csproj" />
+  </ItemGroup>
+
 </Project>

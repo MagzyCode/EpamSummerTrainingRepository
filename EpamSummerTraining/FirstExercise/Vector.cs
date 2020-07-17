@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 
 namespace SecondTask.FirstExercise
 {
@@ -22,30 +23,6 @@ namespace SecondTask.FirstExercise
         /// Направляющие косинусы к осям OX, OY, OZ соответственно
         /// </summary>
         private readonly double[] _guideCosines;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Возврашает длину вектора в пространстве.
-        /// </summary>
-        public double Module
-        { 
-            get
-            {
-                return GetModule();
-            }
-        }
-
-        
-        public bool IsVectorZeroth
-        {
-            get
-            {
-                return _coodinates.Equals(new double[] { 0, 0, 0 });
-            }
-        }
 
         #endregion
 
@@ -85,7 +62,7 @@ namespace SecondTask.FirstExercise
         /// <returns>Возвращает координату вектора. При обращению по 
         /// индексу за границами значений, вызывается IndexOutOfRangeException.
         /// </returns>
-        public double this[int index]
+        private double this[int index]
         {
             get
             {
@@ -95,50 +72,119 @@ namespace SecondTask.FirstExercise
 
         #endregion
 
-        #region Operations
+        #region Properties
 
-        public static Vector operator + (Vector first, Vector second)
+        /// <summary>
+        /// Получает координаты трёхмерного вектора
+        /// </summary>
+        public double[] Coordinates
         {
-            return new Vector(second[0] + first[0], second[1] + first[1], second[2] + first[2]);
+            get
+            {
+                return _coodinates.Clone() as double[];
+            }
         }
 
-        public static Vector operator - (Vector first, Vector second)
-        {
-            return new Vector(first[0] - second[0], first[1] - second[1], first[1] - second[1]);
+        /// <summary>
+        /// Возврашает длину вектора в пространстве.
+        /// </summary>
+        public double Module
+        { 
+            get
+            {
+                return GetModule();
+            }
         }
 
-        public static Vector operator * (Vector vector, int number)
-        {
-            return new Vector(vector[0] * number, vector[1] * number, vector[1] * number);
-        }
 
-        public static Vector operator * (Vector first, Vector second)
+        public bool IsVectorZeroth
         {
-            var xValue = first[1] * second[2] - first[2] * second[1];
-            var yValue = first[2] * second[0] - first[0] * second[2];
-            var zValue = first[0] * second[1] - first[1] * second[0];
-            return new Vector(xValue, yValue, zValue);
-        }
-
-        public static bool operator == (Vector first, Vector second)
-        {
-            bool areCollinear = AreVectorsCollinear(first, second);
-            var areModulesEquals = first.Module == second.Module;
-            var result = areCollinear && areModulesEquals ? true : false;
-            return result;
-        }
-
-        public static bool operator != (Vector first, Vector second)
-        {
-            bool areCollinear = AreVectorsCollinear(first, second);
-            var areModulesEquals = first.Module == second.Module;
-            var result = areCollinear && areModulesEquals ? false : true;
-            return result;
+            get
+            {
+                return _coodinates.All(i => i == 0);
+            }
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Метод сравнения двух векторов на ортогональность (перпендикулярность).
+        /// </summary>
+        /// <param name="firstVector">Первый вектор.</param>
+        /// <param name="secondVector">Второй вектор.</param>
+        /// <returns>Возвращает, в случае ортогональности векторов, true.</returns>
+        public static bool? AreVectorsOrthogonal(Vector firstVector, Vector secondVector)
+        {
+            var result = GetScalarMultiplication(firstVector, secondVector) == 0;
+            return result;
+        }
+
+        /// <summary>
+        /// Метод сравнения двух векторов на коллинеарность (параллельность).
+        /// </summary>
+        /// <param name="firstVector">Первый вектор.</param>
+        /// <param name="secondVector">Второй вектор.</param>
+        /// <returns>
+        /// Если один из векторов нулевой, возвращается null</returns>
+        public static bool? AreVectorsCollinear(Vector firstVector, Vector secondVector)
+        {
+            if (firstVector.IsVectorZeroth || secondVector.IsVectorZeroth)
+            {
+                return null;
+            }
+            var firstCalculation = firstVector[0] / secondVector[0];
+            var secondCalculation = firstVector[1] / secondVector[1];
+            var thirdCalculation = firstVector[2] / secondVector[2];
+            if (firstCalculation == secondCalculation && secondCalculation == thirdCalculation)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Получает скалярное умножение двух векторов.
+        /// </summary>
+        /// <param name="first">Первый вектор.</param>
+        /// <param name="second">Второй вектор.</param>
+        /// <returns>Возвращает скалярное умножение двух векторов.</returns>
+        public static double GetScalarMultiplication(Vector first, Vector second)
+        {
+            var result = first[0] * second[0] + first[1] * second[1] + first[2] * second[2];
+            return result;
+        }
+
+        /// <summary>
+        /// Метод по получению косинуса угла между двумя трёхмерными векторами
+        /// </summary>
+        /// <param name="first">Первый вектор.</param>
+        /// <param name="second">Второй вектор.</param>
+        /// <returns>Возвращает cos(A), где A - угол между двумя векторами.</returns>
+        public static double? GetCosineBetweenVectors(Vector first, Vector second)
+        {
+            if (first.IsVectorZeroth || second.IsVectorZeroth)
+            {
+                return null;
+            }
+            double scalarMultiplication = GetScalarMultiplication(first, second);
+            var result = scalarMultiplication / (first.Module * second.Module);
+            return result;
+        }
+
+        /// <summary>
+        /// Получение смешенного произведения трёх векторов.
+        /// </summary>
+        /// <param name="first">Первый вектор.</param>
+        /// <param name="second">Второй вектор.</param>
+        /// <param name="third">Третий вектор.</param>
+        /// <returns>Возвращает смешенное произведение трёх векторов: [A x [B * C]].</returns>
+        public static double GetVectorsMixedMultiplication(Vector first, Vector second, Vector third)
+        {
+            var result = GetScalarMultiplication(first, second + third);
+            return result;
+        }
 
         /// <summary>
         /// Метод получает длину вектора.
@@ -147,7 +193,7 @@ namespace SecondTask.FirstExercise
         private double GetModule()
         {
             var rootValue = Math.Pow(this[0], 2) + Math.Pow(this[1], 2) + Math.Pow(this[2], 2);
-            var module = Math.Pow(rootValue ,0.5);
+            var module = Math.Pow(rootValue, 0.5);
             return module;
         }
 
@@ -179,59 +225,57 @@ namespace SecondTask.FirstExercise
             return HashCode.Combine(this);
         }
 
-        /// <summary>
-        /// Метод сравнения двух векторов на ортогональность (перпендикулярность).
-        /// </summary>
-        /// <param name="firstVector">Первый вектор.</param>
-        /// <param name="secondVector">Второй вектор.</param>
-        /// <returns>Возвращает bool, в случае ортогональности векторов, возвращается true</returns>
-        public static bool AreVectorsOrthogonal(Vector firstVector, Vector secondVector)
+        #endregion
+
+        #region Operations
+
+        public static Vector operator + (Vector first, Vector second)
         {
-            var result = GetScalarMultiplication(firstVector, secondVector) == 0 ? true : false;
-            return result;
+            return new Vector(second[0] + first[0], second[1] + first[1], second[2] + first[2]);
+        }
+
+        public static Vector operator - (Vector first, Vector second)
+        {
+            return new Vector(first[0] - second[0], first[1] - second[1], first[2] - second[2]);
+        }
+
+        public static Vector operator * (Vector vector, double number)
+        {
+            return new Vector(vector[0] * number, vector[1] * number, vector[2] * number);
+        }
+
+        public static Vector operator * (double number, Vector vector)
+        {
+            return vector * number;
         }
 
         /// <summary>
-        /// Метод сравнения двух векторов на коллинеарность (параллельность).
+        /// Операция по векторному умножению векторов.
         /// </summary>
-        /// <param name="firstVector">Первый вектор.</param>
-        /// <param name="secondVector">Второй вектор.</param>
+        /// <param name="first">Первый вектор.</param>
+        /// <param name="second">Второй вектор.</param>
         /// <returns></returns>
-        public static bool AreVectorsCollinear(Vector firstVector, Vector secondVector)
+        public static Vector operator * (Vector first, Vector second)
         {
-            var firstCalculation = firstVector[0] / secondVector[0]; 
-            var secondCalculation = firstVector[1] / secondVector[1];
-            var thirdCalculation = firstVector[2] / secondVector[2];
-            if (firstCalculation == secondCalculation && secondCalculation == thirdCalculation)
-            {
-                return true;
-            }
-            return false;
+            var xValue = first[1] * second[2] - first[2] * second[1];
+            var yValue = first[2] * second[0] - first[0] * second[2];
+            var zValue = first[0] * second[1] - first[1] * second[0];
+            return new Vector(xValue, yValue, zValue);
         }
 
-        public static double GetScalarMultiplication(Vector first, Vector second)
+        public static bool operator == (Vector first, Vector second)
         {
-            var result = first[0] * second[0] + first[2] * second[2] + first[2] * second[2];
+            var result = Enumerable.SequenceEqual(first.Coordinates, second.Coordinates);
             return result;
         }
 
-        public static double GetCosineBetweenVectors(Vector first, Vector second)
+        public static bool operator != (Vector first, Vector second)
         {
-            if (first.IsVectorZeroth || second.IsVectorZeroth)
-            {
-                // что возвращать, в случае ошибки?
-            }
-            double scalarMultiplication = GetScalarMultiplication(first, second);
-            var result = scalarMultiplication / (first.Module * second.Module);
-            return result;
-        }
-
-        public static double GetVectorsMixedMultiplication(Vector first, Vector second, Vector third)
-        {
-            var result = GetScalarMultiplication(first, second + third);
+            var result = !(first == second);
             return result;
         }
 
         #endregion
+
     }
 }

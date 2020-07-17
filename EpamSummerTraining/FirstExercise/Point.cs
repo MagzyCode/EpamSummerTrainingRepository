@@ -10,21 +10,15 @@ namespace SecondTask.FirstExercise
     /// </summary>
     public class ThreeDimensionalPoint
     {
+        #region Fields
         /// <summary>
         /// Координаты точки.
         /// </summary>
         private double[] _coordinates;
 
-        /// <summary>
-        /// Координаты точки.
-        /// </summary>
-        public double[] Coordinates
-        {
-            get
-            {
-                return _coordinates.Clone() as double[];
-            }
-        }
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Инициализация типа ThreeDimensionalPoint, используя значения 
@@ -38,6 +32,9 @@ namespace SecondTask.FirstExercise
             _coordinates = new double[] { xAxis, yAxis, zAxis };
         }
 
+        #endregion
+
+        #region Indexer
         public double this[int index]
         {
             get
@@ -46,10 +43,24 @@ namespace SecondTask.FirstExercise
             }
         }
 
-        public static ThreeDimensionalPoint operator - (ThreeDimensionalPoint start, ThreeDimensionalPoint end)
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Координаты точки.
+        /// </summary>
+        public double[] Coordinates
         {
-            return new ThreeDimensionalPoint(start[0] - end[0], start[1] - end[1], start[2] - end[2]);
+            get
+            {
+                return _coordinates.Clone() as double[];
+            }
         }
+
+        #endregion
+
+        #region Methods
 
         public override string ToString()
         {
@@ -57,6 +68,16 @@ namespace SecondTask.FirstExercise
             return $"Point ({coordinates})";
         }
 
+        #endregion
+
+        #region Operations
+
+        public static ThreeDimensionalPoint operator - (ThreeDimensionalPoint start, ThreeDimensionalPoint end)
+        {
+            return new ThreeDimensionalPoint(start[0] - end[0], start[1] - end[1], start[2] - end[2]);
+        }
+
+        #endregion
 
     }
 }
