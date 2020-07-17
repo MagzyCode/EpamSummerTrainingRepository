@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿
 
 namespace SecondTask.FirstExercise
 {
+    using System;
     /// <summary>
     /// Класс представляет точку в трёхмерном пространстве.
     /// </summary>

@@ -1,10 +1,7 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
 
 namespace SecondTask.FirstExercise
 {
@@ -89,13 +86,12 @@ namespace SecondTask.FirstExercise
         /// Возврашает длину вектора в пространстве.
         /// </summary>
         public double Module
-        { 
+        {
             get
             {
                 return GetModule();
             }
         }
-
 
         public bool IsVectorZeroth
         {
@@ -229,22 +225,22 @@ namespace SecondTask.FirstExercise
 
         #region Operations
 
-        public static Vector operator + (Vector first, Vector second)
+        public static Vector operator +(Vector first, Vector second)
         {
             return new Vector(second[0] + first[0], second[1] + first[1], second[2] + first[2]);
         }
 
-        public static Vector operator - (Vector first, Vector second)
+        public static Vector operator -(Vector first, Vector second)
         {
             return new Vector(first[0] - second[0], first[1] - second[1], first[2] - second[2]);
         }
 
-        public static Vector operator * (Vector vector, double number)
+        public static Vector operator *(Vector vector, double number)
         {
             return new Vector(vector[0] * number, vector[1] * number, vector[2] * number);
         }
 
-        public static Vector operator * (double number, Vector vector)
+        public static Vector operator *(double number, Vector vector)
         {
             return vector * number;
         }
@@ -255,7 +251,7 @@ namespace SecondTask.FirstExercise
         /// <param name="first">Первый вектор.</param>
         /// <param name="second">Второй вектор.</param>
         /// <returns></returns>
-        public static Vector operator * (Vector first, Vector second)
+        public static Vector operator *(Vector first, Vector second)
         {
             var xValue = first[1] * second[2] - first[2] * second[1];
             var yValue = first[2] * second[0] - first[0] * second[2];
@@ -263,13 +259,13 @@ namespace SecondTask.FirstExercise
             return new Vector(xValue, yValue, zValue);
         }
 
-        public static bool operator == (Vector first, Vector second)
+        public static bool operator ==(Vector first, Vector second)
         {
             var result = Enumerable.SequenceEqual(first.Coordinates, second.Coordinates);
             return result;
         }
 
-        public static bool operator != (Vector first, Vector second)
+        public static bool operator !=(Vector first, Vector second)
         {
             var result = !(first == second);
             return result;

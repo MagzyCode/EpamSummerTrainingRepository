@@ -8,4 +8,11 @@
     <Folder Include="ThirdExercise\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="SecondExercise\Polynomial.cs">
+      <ExcludeFromSourceAnalysis>False</ExcludeFromSourceAnalysis>
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
+
 </Project>
