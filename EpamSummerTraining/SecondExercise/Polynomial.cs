@@ -85,18 +85,10 @@
         #endregion
 
         #region Methods
-
-        public override string ToString()
+        
+        public override int GetHashCode()
         {
-            var result = new StringBuilder();
-            for (int i = Degree - 1; i >= 0; i--)
-            {
-                var additionString = i == 0
-                        ? $"{Coefficients[i]}*x^{i + 1}+"
-                        : $"{Coefficients[i]}*x^{i + 1}";
-                result.Append(additionString);
-            }
-            return result.ToString();
+            return HashCode.Combine(this);
         }
 
         public override bool Equals(object obj)
@@ -143,18 +135,20 @@
             (Polynomial minValue, Polynomial maxValue) = firstValue > secondValue
                     ? (secondValue, firstValue)
                     : (firstValue, secondValue);
-            var result = new Polynomial(maxValue.Degree);
+            var arrayOfCoefficients = new double[maxValue.Degree];
             for (int i = 0; i < maxValue.Degree; i++)
             {
                 if (i >= minValue.Degree)
                 {
-                    result[i] = maxValue[i];
+                    arrayOfCoefficients[i] = maxValue[i];
                 }
                 else
                 {
-                    result[i] = minValue[i] + maxValue[i];
+                    arrayOfCoefficients[i] = minValue[i] + maxValue[i];
                 }
             }
+            GetCorrectCoefficients(ref arrayOfCoefficients);
+            var result = new Polynomial(arrayOfCoefficients);
             return result;
         }
 
@@ -182,6 +176,7 @@
             {
                 arrayOfCoefficients[i] = value[i] * number;
             }
+            GetCorrectCoefficients(ref arrayOfCoefficients);
             var result = new Polynomial(arrayOfCoefficients);
             return result;
         }
@@ -201,6 +196,7 @@
                     arrayOfCoefficients[i + j] += firstValue[i] * secondValue[j];
                 }
             }
+            GetCorrectCoefficients(ref arrayOfCoefficients);
             var result = new Polynomial(arrayOfCoefficients);
             return result;
         }
