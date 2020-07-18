@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestSecondExercise\" />
     <Folder Include="TestThirdExercise\" />
   </ItemGroup>
 

@@ -12,7 +12,7 @@ namespace SecondTasks.Tests.TestFirstExercise
 
             var firstVector = new Vector(5, -6, 1);
             var secondVector = new Vector(33, 2, 4);
-            var actual = firstVector - secondVector;
+            var actual = firstVector * secondVector;
 
             Assert.Equal(expected, actual);
         }
@@ -20,11 +20,11 @@ namespace SecondTasks.Tests.TestFirstExercise
         [Fact]
         public void VectorialMultiplication_vector_2_8_9_and_vector_min3_min2_0()
         {
-            var expected = new Vector(18, -27, 20);
+            var expected = new Vector(-18, 27, -20);
 
             var firstVector = new Vector(2, 8, 9);
             var secondVector = new Vector(3, 2, 0);
-            var actual = firstVector - secondVector;
+            var actual = firstVector * secondVector;
 
             Assert.Equal(expected, actual);
         }
