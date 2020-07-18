@@ -1,24 +1,26 @@
-﻿using System;
+﻿using SecondTask.FirstExercise;
+using SecondTask.ThirdExercise.Specific_Product;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SecondTask.ThirdExercise
 {
-    public abstract class Product
+    public class Product
     {
         #region Fields
         /// <summary>
         /// Наименование товара
         /// </summary>
-        private string _name;
+        private protected string _name;
         /// <summary>
         /// Тип товара
         /// </summary>
-        private string _typeOfProduct;
+        private protected ProductType _typeOfProduct;
         /// <summary>
         /// Стоимость товара
         /// </summary>
-        private double _cost;
+        private protected double _cost;
 
         #endregion
 
@@ -36,16 +38,16 @@ namespace SecondTask.ThirdExercise
         /// будет вызвана NullReferenceException с соответствующим сообщением</param>
         /// <param name="cost">Цена продукта. В случае присвоении цене отрицательного
         /// значения будет вызвано исключение Exception с соответствующимм сообзением</param>
-        public Product(string name, string typeOfProduct, double cost)
+        public Product(string name, ProductType typeOfProduct, double cost)
         {
             _name = name ?? throw new NullReferenceException("Значение name не может быть null");
-            _typeOfProduct = typeOfProduct ?? throw new NullReferenceException("TypeOfProduct не может быть null");
+            _typeOfProduct = typeOfProduct;
             _cost = cost > 0 ? cost : throw new Exception("Значение cost не может быть отрицательным");
         }
 
         #endregion Properties
 
-        public string NameOfProduct
+        public string Name
         {
             get
             {
@@ -58,16 +60,17 @@ namespace SecondTask.ThirdExercise
             }
         }
 
-        public string TypeOfProduct
+        public ProductType TypeOfProduct
         {
             get
             {
-                return _typeOfProduct.Clone() as string;
+                return _typeOfProduct;
             }
 
             set
             {
-                _typeOfProduct = value ?? throw new NullReferenceException("TypeOfProduct не может быть null");
+                // _typeOfProduct = GetType().Name;
+                _typeOfProduct = value;
             }
         }
 
@@ -85,27 +88,51 @@ namespace SecondTask.ThirdExercise
         }
 
         #region Methods
+        public static T GetAdditionOfProducts<T> (T first, T second) where T : Product, new()
+        {
+            var average = (first.Cost + second.Cost) / 2.0;
+            var result = new T() 
+            { 
+                Name = first.Name + "-" + second.Name, 
+                TypeOfProduct = first.TypeOfProduct, 
+                Cost = average
+            };
+            return result;
+        }
+
+        public static T GetConvertedProduct<T, K>(K product) 
+                where T : Product, new()
+                where K : Product, new()
+        {
+            var result = new T()
+            {
+                Name = product.Name,
+                TypeOfProduct = product.TypeOfProduct,
+                Cost = product.Cost
+            };
+            return result;
+        }
+
+        public static explicit operator int(Product product)
+        {
+            var result = (int)product.Cost * 100;
+            return result;
+        }
+
+        public static explicit operator double(Product product)
+        {
+            var result = product.Cost;
+            return result;
+        }
+
 
         #endregion
-
-        #region Operations
-
-        //public abstract Product operator +(Product first, Product second);
-        //{
-        //    if (first.GetType() == second.GetType())
-        //    {
-        //        var result = new Product()
-        //        {
-        //            // NameOfProduct = $"{first.NameOfProduct}-{second.NameOfProduct}";
-        //        }
-        //    }
-        //}
-
-        #endregion
-
-
-
-
-        
     }
+
 }
+
+
+
+
+
+
