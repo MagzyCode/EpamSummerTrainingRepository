@@ -25,7 +25,7 @@ namespace SecondTask.ThirdExercise.Specific_Product
         /// <param name="name">Наименование товара.</param>
         /// <param name="cost">Стоимость продукта.</param>
         /// <param name="nutritionalValue">Пищевая ценность.</param>
-        public GastronomicProduct(string name, double cost, double nutritionalValue)
+        public GastronomicProduct(string name, double cost, double nutritionalValue = 0)
                 : base(name, ProductType.NonFood, cost)
         {
             NutritionalValue = nutritionalValue;
@@ -43,7 +43,7 @@ namespace SecondTask.ThirdExercise.Specific_Product
 
             set
             {
-                _nutritionalValue = value > 0
+                _nutritionalValue = value >= 0
                         ? value
                         : throw new Exception("Пищевая ценность не может быть отрицательность");
             }

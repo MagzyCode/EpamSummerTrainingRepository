@@ -100,6 +100,23 @@ namespace SecondTask.ThirdExercise
 
         #region Methods
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Product product)
+            {
+                if (product.Cost == Cost && product.Name == Name && product.TypeOfProduct == TypeOfProduct)
+                {
+                    return true;
+                }
+            }
+            return false; ;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this);
+        }
+
         /// <summary>
         /// Метод по сложения двух продуктов.
         /// </summary>
