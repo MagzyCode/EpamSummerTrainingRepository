@@ -43,25 +43,25 @@ namespace SecondTask.ThirdExercise.Specific_Product
         /// </returns>
         public static BiochemicalProduct operator +(BiochemicalProduct first, BiochemicalProduct second)
         {
-            var result = GetAdditionOfProducts(first, second);
+            BiochemicalProduct result = GetAdditionOfProducts(first, second);
             return result;
         }
 
         public static implicit operator GastronomicProduct(BiochemicalProduct product)
         {
-            var result = GetConvertedProduct<GastronomicProduct, BiochemicalProduct>(product);
+            GastronomicProduct result = GetConvertedProduct<GastronomicProduct, BiochemicalProduct>(product);
             return result;
         }
 
         public static implicit operator HouseholdProduct(BiochemicalProduct product)
         {
-            var result = GetConvertedProduct<HouseholdProduct, BiochemicalProduct>(product);
+            HouseholdProduct result = GetConvertedProduct<HouseholdProduct, BiochemicalProduct>(product);
             return result;
         }
 
         public static implicit operator GroceryProduct(BiochemicalProduct product)
         {
-            var result = GetConvertedProduct<GroceryProduct, BiochemicalProduct>(product);
+            GroceryProduct result = GetConvertedProduct<GroceryProduct, BiochemicalProduct>(product);
             return result;
         }
     }

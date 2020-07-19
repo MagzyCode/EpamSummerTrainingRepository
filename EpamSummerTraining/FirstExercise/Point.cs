@@ -1,6 +1,4 @@
-﻿
-
-namespace SecondTask.FirstExercise
+﻿namespace SecondTask.FirstExercise
 {
     using System;
     /// <summary>
@@ -12,7 +10,7 @@ namespace SecondTask.FirstExercise
         /// <summary>
         /// Координаты точки.
         /// </summary>
-        private double[] _coordinates;
+        private readonly double[] _coordinates;
 
         #endregion
 

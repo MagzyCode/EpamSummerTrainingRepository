@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SecondTask.ThirdExercise
+﻿namespace SecondTask.ThirdExercise
 {
     /// <summary>
-    /// Перечисление для обозначения типа продукта
+    /// Перечисление для обозначения типа продукта.
     /// </summary>
     public enum ProductType
     {
+        /// <summary>
+        /// Продовольственный товар.
+        /// </summary>
         Food,
+        /// <summary>
+        /// Непродовольственный товар.
+        /// </summary>
         NonFood
     }
 }

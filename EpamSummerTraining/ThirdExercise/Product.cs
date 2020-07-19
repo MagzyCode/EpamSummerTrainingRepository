@@ -1,8 +1,4 @@
-﻿using SecondTask.FirstExercise;
-using SecondTask.ThirdExercise.Specific_Product;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace SecondTask.ThirdExercise
 {
@@ -13,15 +9,15 @@ namespace SecondTask.ThirdExercise
     {
         #region Fields
         /// <summary>
-        /// Наименование товара
+        /// Наименование товара.
         /// </summary>
         private protected string _name;
         /// <summary>
-        /// Тип товара
+        /// Тип товара.
         /// </summary>
         private protected ProductType _typeOfProduct;
         /// <summary>
-        /// Стоимость товара
+        /// Стоимость товара.
         /// </summary>
         private protected double _cost;
 
@@ -94,7 +90,7 @@ namespace SecondTask.ThirdExercise
 
             set
             {
-                _cost = value > 0 ? value : throw new Exception("Значение cost не может быть отрицательным");
+                _cost = value > 0 ? value : throw new Exception("Значение Cost не может быть отрицательным");
             }
         }
 
@@ -104,12 +100,9 @@ namespace SecondTask.ThirdExercise
         {
             if (obj is Product product)
             {
-                if (product.Cost == Cost && product.Name == Name && product.TypeOfProduct == TypeOfProduct)
-                {
-                    return true;
-                }
+                return this == product;
             }
-            return false; ;
+            return false;
         }
 
         public override int GetHashCode()
@@ -156,6 +149,25 @@ namespace SecondTask.ThirdExercise
             return result;
         }
 
+        #endregion
+
+        #region Operations
+
+        public static bool operator ==(Product left, Product right)
+        {
+            if (left.Cost == right.Cost && left.Name == right.Name &&
+                        left.TypeOfProduct == right.TypeOfProduct)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool operator !=(Product left, Product right)
+        {
+            return !(left == right);
+        }
+
         /// <summary>
         /// Преобразвание типа Product к целочисленному виду (перевод в копейки).
         /// </summary>
@@ -175,7 +187,6 @@ namespace SecondTask.ThirdExercise
             var result = product.Cost;
             return result;
         }
-
 
         #endregion
     }

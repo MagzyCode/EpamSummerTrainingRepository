@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SecondTask.ThirdExercise.Specific_Product
+﻿namespace SecondTask.ThirdExercise.Specific_Product
 {
     /// <summary>
     /// Класс представляющий собой бытовые товары: часы, канцелярские, спортивными, 
@@ -34,25 +30,25 @@ namespace SecondTask.ThirdExercise.Specific_Product
         /// <returns>Возвращает объект типа HouseholdProduct.</returns>
         public static HouseholdProduct operator +(HouseholdProduct first, HouseholdProduct second)
         {
-            var result = GetAdditionOfProducts(first, second);
+            HouseholdProduct result = GetAdditionOfProducts(first, second);
             return result;
         }
 
         public static implicit operator BiochemicalProduct(HouseholdProduct product)
         {
-            var result = GetConvertedProduct<BiochemicalProduct, HouseholdProduct>(product);
+            BiochemicalProduct result = GetConvertedProduct<BiochemicalProduct, HouseholdProduct>(product);
             return result;
         }
 
         public static implicit operator GroceryProduct(HouseholdProduct product)
         {
-            var result = GetConvertedProduct<GroceryProduct, HouseholdProduct>(product);
+            GroceryProduct result = GetConvertedProduct<GroceryProduct, HouseholdProduct>(product);
             return result;
         }
 
         public static implicit operator GastronomicProduct(HouseholdProduct product)
         {
-            var result = GetConvertedProduct<GastronomicProduct, HouseholdProduct>(product);
+            GastronomicProduct result = GetConvertedProduct<GastronomicProduct, HouseholdProduct>(product);
             return result;
         }
     }

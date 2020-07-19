@@ -20,15 +20,27 @@
 
         #region Constructors
 
+        /// <summary>
+        /// Инициализирует объект типа Polynomial,
+        /// используя старшую степень полинома.
+        /// </summary>
+        /// <param name="degree">Степень старшего члена.
+        /// При попытке ввести отрицательное число или 0 будет
+        /// вызвано исключение ArgumentOutOfRangeException.</param>
         public Polynomial(int degree)
         {
             _coefficients = degree < 0 ? throw new ArgumentOutOfRangeException() : new double[degree];
         }
 
+        /// <summary>
+        /// Инициализирует объект типа Polynomial,
+        /// используя коэффициенты полинома.
+        /// </summary>
+        /// <param name="coefficients">Коэффициенты полинома. При попытке
+        /// ввести значение null будет вызвано исключение NullReferenceException</param>
         public Polynomial(params double[] coefficients)
         {
-            GetCorrectCoefficients(ref coefficients);
-            _coefficients = coefficients ?? throw new NullReferenceException();
+            Coefficients = coefficients;
         }
 
         #endregion
@@ -65,6 +77,8 @@
 
         /// <summary>
         /// Коэффициенты полинома по возрастанию.
+        /// При попытке присвоения null, будет вызвано
+        /// исключение NullReferenceException.
         /// </summary>
         public double[] Coefficients
         {
@@ -72,11 +86,17 @@
             {
                 return _coefficients.Clone() as double[];
             }
+
             set
             {
                 if (value != null)
                 {
+                    GetCorrectCoefficients(ref value);
                     _coefficients = value;
+                }
+                else
+                {
+                    throw new NullReferenceException("Нельзя присвоить коэффициентам полинома null");
                 }
             }
         }
@@ -93,37 +113,30 @@
 
         public override bool Equals(object obj)
         {
-            var polynomial = (obj as Polynomial);
-            if (polynomial != null)
+            if (obj is Polynomial polynomial)
             {
-                var result = Enumerable.SequenceEqual(this.Coefficients, polynomial.Coefficients);
-                return result;
+                return this == polynomial;
             }
             return false;
         }
 
+        /// <summary>
+        /// Метод по сокращению полинома, в случае нулевых
+        /// значений старших коэффициентов.
+        /// </summary>
+        /// <param name="coefficients">Коэффициенты полинома.</param>
         private static void GetCorrectCoefficients(ref double[] coefficients)
         {
-            if (coefficients == null)
-            {
-                return;
-            }
-
             coefficients = coefficients.Reverse().ToArray();
-            var counterOfZerosDegree = 0;
-            for (int i = 0; i < coefficients.Length; i++)
+            var counterOfZeros = 0;
+            for (; counterOfZeros < coefficients.Length; counterOfZeros++)
             {
-                if (coefficients[i] != 0)
+                if (coefficients[counterOfZeros] != 0)
                 {
                     break;
                 }
-                else
-                {
-                    counterOfZerosDegree++;
-                }
             }
-            coefficients = coefficients.Skip(counterOfZerosDegree).Reverse().ToArray();
-           
+            coefficients = coefficients.Skip(counterOfZeros).Reverse().ToArray();    
         }
 
         #endregion
@@ -152,21 +165,60 @@
             return result;
         }
 
-        public static bool operator > (Polynomial firstValue, Polynomial secondValue)
-        {
-            var result = firstValue.Degree > secondValue.Degree;
-            return result;
-        }
-
-        public static bool operator < (Polynomial firstValue, Polynomial secondValue)
-        {
-            var result = !(firstValue > secondValue);
-            return result;
-        }
-
-        public static Polynomial operator - (Polynomial firstValue, Polynomial secondValue)
+        public static Polynomial operator -(Polynomial firstValue, Polynomial secondValue)
         {
             return firstValue + (secondValue * -1);
+        }
+
+        /// <summary>
+        /// Сравнение двух полиномов по их старшей степени.
+        /// </summary>
+        /// <param name="left">Левый операнд.</param>
+        /// <param name="right">Правый операнд.</param>
+        /// <returns>Возвращает bool.</returns>
+        public static bool operator > (Polynomial left, Polynomial right)
+        {
+            var result = left.Degree > right.Degree;
+            return result;
+        }
+
+        /// <summary>
+        /// Сравнение двух полиномов по их старшей степени.
+        /// </summary>
+        /// <param name="left">Левый операнд.</param>
+        /// <param name="right">Правый операнд.</param>
+        /// <returns>Возвращает bool.</returns>
+        public static bool operator < (Polynomial left, Polynomial right)
+        {
+            var result = !(left > right);
+            return result;
+        }
+
+        /// <summary>
+        /// Сравнение двух полином по средству
+        /// сравнения их коэффициентов.
+        /// </summary>
+        /// <param name="left">Левый операнд.</param>
+        /// <param name="right">Правый операнд.</param>
+        /// <returns>Возращает true в случае равенства двух полиномов. Если 
+        /// один из элементов равен null результатом вернется false.</returns>
+        public static bool operator == (Polynomial left, Polynomial right)
+        {
+            var result = Enumerable.SequenceEqual(left.Coefficients, right.Coefficients);
+            return result;
+        }
+
+        /// <summary>
+        /// Сравнение двух полином по средству
+        /// сравнения их коэффициентов.
+        /// </summary>
+        /// <param name="left">Левый операнд.</param>
+        /// <param name="right">Правый операнд.</param>
+        /// <returns>Возращает true в случае равенства двух полиномов. Если 
+        /// один из элементов равен null результатом вернется false.</returns>
+        public static bool operator != (Polynomial left, Polynomial right)
+        {
+            return !(left == right);
         }
 
         public static Polynomial operator * (Polynomial value, double number)
@@ -176,7 +228,6 @@
             {
                 arrayOfCoefficients[i] = value[i] * number;
             }
-            GetCorrectCoefficients(ref arrayOfCoefficients);
             var result = new Polynomial(arrayOfCoefficients);
             return result;
         }
@@ -196,16 +247,23 @@
                     arrayOfCoefficients[i + j] += firstValue[i] * secondValue[j];
                 }
             }
-            GetCorrectCoefficients(ref arrayOfCoefficients);
             var result = new Polynomial(arrayOfCoefficients);
             return result;
         }
 
+        /// <summary>
+        /// Операция деления полиномов с остатком.
+        /// </summary>
+        /// <param name="dividend">Полином, на который делят.</param>
+        /// <param name="divider">Полином, который делит.</param>
+        /// <returns>Возвращает результат деления и остаток от него соответственно.
+        /// В случае невозможности деления вызывается исключение ArithmeticException.
+        /// </returns>
         public static (Polynomial quotient, Polynomial remainder) operator / (Polynomial dividend, Polynomial divider)
         {
-            if ((dividend.Coefficients.Last() == 0) || (divider.Coefficients.Last() == 0))
+            if (dividend.Degree < divider.Degree)
             {
-                throw new ArithmeticException("Старший член многочлена делимого не может быть 0");
+                throw new ArithmeticException("Степень делителя не может быть больше степени делимого");
             }
 
             var remainder = dividend.Coefficients.Clone() as double[];
@@ -219,7 +277,6 @@
                     remainder[remainder.Length - i - j - 1] -= coefficients * divider[divider.Degree - j - 1];
                 }
             }
-            GetCorrectCoefficients(ref remainder);
             var quotientOfPolynomial = new Polynomial(quotient);
             var remainderOfPolynomial = new Polynomial(remainder);
             return (quotientOfPolynomial, remainderOfPolynomial);

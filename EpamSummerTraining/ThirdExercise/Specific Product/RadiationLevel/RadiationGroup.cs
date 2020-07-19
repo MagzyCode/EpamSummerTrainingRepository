@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SecondTask.ThirdExercise.Specific_Product.Radiation_level_of_the_product
+﻿namespace SecondTask.ThirdExercise.Specific_Product.Radiation_level_of_the_product
 {
+    /// <summary>
+    /// Перечисление, отображающее степень радиобезопасности товара.
+    /// </summary>
     public enum RadiationGroup
     {
         /// <summary>

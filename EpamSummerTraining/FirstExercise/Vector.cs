@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SecondTask.FirstExercise
 {
@@ -13,13 +14,9 @@ namespace SecondTask.FirstExercise
         #region Fields
 
         /// <summary>
-        /// Координаты вектора
+        /// Координаты вектора.
         /// </summary>
         private readonly double[] _coodinates;
-        /// <summary>
-        /// Направляющие косинусы к осям OX, OY, OZ соответственно
-        /// </summary>
-        private readonly double[] _guideCosines;
 
         #endregion
 
@@ -33,7 +30,6 @@ namespace SecondTask.FirstExercise
         public Vector(ThreeDimensionalPoint startPoint, ThreeDimensionalPoint endPoint)
         {
             _coodinates = (startPoint - endPoint).Coordinates;
-            _guideCosines = GetGuideCosines();
         }
 
         /// <summary>
@@ -45,7 +41,6 @@ namespace SecondTask.FirstExercise
         public Vector(double xCoordinate, double yCoordinate, double zCoordinate)
         {
             _coodinates = new double[] { xCoordinate, yCoordinate, zCoordinate };
-            _guideCosines = GetGuideCosines();
         }
 
         #endregion
@@ -56,9 +51,8 @@ namespace SecondTask.FirstExercise
         /// Индексатор, обращающийся к значениям координат вектора.
         /// </summary>
         /// <param name="index">Индекс обращения к координате вектора.</param>
-        /// <returns>Возвращает координату вектора. При обращению по 
-        /// индексу за границами значений, вызывается IndexOutOfRangeException.
-        /// </returns>
+        /// <returns>Возвращает координату вектора. При обращению по индексу за
+        /// границами значений, вызывается IndexOutOfRangeException.</returns>
         private double this[int index]
         {
             get
@@ -72,7 +66,7 @@ namespace SecondTask.FirstExercise
         #region Properties
 
         /// <summary>
-        /// Получает координаты трёхмерного вектора
+        /// Получает координаты трёхмерного вектора.
         /// </summary>
         public double[] Coordinates
         {
@@ -93,6 +87,9 @@ namespace SecondTask.FirstExercise
             }
         }
 
+        /// <summary>
+        /// Проверяется ли объект нулевым вектором.
+        /// </summary>
         public bool IsVectorZeroth
         {
             get
@@ -104,6 +101,26 @@ namespace SecondTask.FirstExercise
         #endregion
 
         #region Methods
+
+        public override string ToString()
+        {
+            var vector = String.Join(',', _coodinates);
+            return $"({vector})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector vector)
+            {
+                return this == vector;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this);
+        }
 
         /// <summary>
         /// Метод сравнения двух векторов на ортогональность (перпендикулярность).
@@ -153,23 +170,6 @@ namespace SecondTask.FirstExercise
         }
 
         /// <summary>
-        /// Метод по получению косинуса угла между двумя трёхмерными векторами
-        /// </summary>
-        /// <param name="first">Первый вектор.</param>
-        /// <param name="second">Второй вектор.</param>
-        /// <returns>Возвращает cos(A), где A - угол между двумя векторами.</returns>
-        public static double? GetCosineBetweenVectors(Vector first, Vector second)
-        {
-            if (first.IsVectorZeroth || second.IsVectorZeroth)
-            {
-                return null;
-            }
-            double scalarMultiplication = GetScalarMultiplication(first, second);
-            var result = scalarMultiplication / (first.Module * second.Module);
-            return result;
-        }
-
-        /// <summary>
         /// Получение смешенного произведения трёх векторов.
         /// </summary>
         /// <param name="first">Первый вектор.</param>
@@ -193,34 +193,6 @@ namespace SecondTask.FirstExercise
             return module;
         }
 
-        /// <summary>
-        /// Получает массив направляющих косинусов к соответсвующим осям.
-        /// </summary>
-        /// <returns>Возвращает массив значений направляющих косинусов</returns>
-        private double[] GetGuideCosines()
-        {
-            var xCosineValue = _coodinates[0] / Module;
-            var yCosineValue = _coodinates[1] / Module;
-            var zCosineValue = _coodinates[2] / Module;
-            return new double[] { xCosineValue, yCosineValue, zCosineValue };
-        }
-
-        public override string ToString()
-        {
-            var vector = String.Join(',', _coodinates);
-            return $"({vector})";
-        }
-
-        public override bool Equals(object obj)
-        {
-            return this == (obj as Vector);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(this);
-        }
-
         #endregion
 
         #region Operations
@@ -232,7 +204,7 @@ namespace SecondTask.FirstExercise
 
         public static Vector operator -(Vector first, Vector second)
         {
-            return new Vector(first[0] - second[0], first[1] - second[1], first[2] - second[2]);
+            return first + (second * -1);
         }
 
         public static Vector operator *(Vector vector, double number)
@@ -250,8 +222,9 @@ namespace SecondTask.FirstExercise
         /// </summary>
         /// <param name="first">Первый вектор.</param>
         /// <param name="second">Второй вектор.</param>
-        /// <returns></returns>
-        public static Vector operator *(Vector first, Vector second)
+        /// <returns>Возвращает тип Vector, являющимся
+        /// результатом векторного умножения векторов.</returns>
+        public static Vector operator * (Vector first, Vector second)
         {
             var xValue = first[1] * second[2] - first[2] * second[1];
             var yValue = first[2] * second[0] - first[0] * second[2];

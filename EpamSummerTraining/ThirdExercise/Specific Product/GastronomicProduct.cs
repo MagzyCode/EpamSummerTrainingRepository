@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace SecondTask.ThirdExercise.Specific_Product
 {
@@ -33,6 +30,8 @@ namespace SecondTask.ThirdExercise.Specific_Product
 
         /// <summary>
         /// Свойство, возвращающее пищевую ценность продукта.
+        /// При попытке присвоения отрицательного значения
+        /// вызывается исключение Exception.
         /// </summary>
         public double NutritionalValue
         {
@@ -51,25 +50,25 @@ namespace SecondTask.ThirdExercise.Specific_Product
 
         public static GastronomicProduct operator +(GastronomicProduct first, GastronomicProduct second)
         {
-            var result = GetAdditionOfProducts(first, second);
+            GastronomicProduct result = GetAdditionOfProducts(first, second);
             return result;
         }
 
         public static implicit operator BiochemicalProduct(GastronomicProduct product)
         {
-            var result = GetConvertedProduct<BiochemicalProduct, GastronomicProduct>(product);
+            BiochemicalProduct result = GetConvertedProduct<BiochemicalProduct, GastronomicProduct>(product);
             return result;
         }
 
         public static implicit operator HouseholdProduct(GastronomicProduct product)
         {
-            var result = GetConvertedProduct<HouseholdProduct, GastronomicProduct>(product);
+            HouseholdProduct result = GetConvertedProduct<HouseholdProduct, GastronomicProduct>(product);
             return result;
         }
 
         public static implicit operator GroceryProduct(GastronomicProduct product)
         {
-            var result = GetConvertedProduct<GroceryProduct, GastronomicProduct>(product);
+            GroceryProduct result = GetConvertedProduct<GroceryProduct, GastronomicProduct>(product);
             return result;
         }
     }
