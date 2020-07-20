@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Application.Painting
 {
@@ -27,6 +26,20 @@ namespace Application.Painting
             AbscissaAxisValue = xPoint;
         }
 
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Point point)
+            {
+                return this == point;
+            }
+            return false;
+        }
+
         public override string ToString()
         {
             return $"({AbscissaAxisValue}, {OrdinateAxisValue})";
@@ -34,12 +47,19 @@ namespace Application.Painting
 
         /// <summary>
         /// Статическмй метод по созданию массива точек из массива значений x и y.
+        /// Если массив содержать нечётное или нулевое количество координат
+        /// будет вызвано исключение Exception с соответствующим сообщением.
         /// </summary>
         /// <param name="values">Массив координат точек, каждая пара значений - точка.</param>
         /// <returns>Возвращает массив точек</returns>
         public static Point[] GetPointsFromArray(double[] values)
         {
-            var list = new List<Point>();
+            if ((values.Length == 0) || (values.Length % 2 == 1))
+            {
+                throw new Exception("Невозможно преобразовать данные в массив точек.");
+            }
+
+            var list = new List<Point>(values.Length / 2);
             for (int counter = 0; counter < values.Length; counter += 2)
             {
                 list.Add(new Point(values[counter], values[counter + 1]));
@@ -70,15 +90,36 @@ namespace Application.Painting
         /// <returns>Возвращает расстояние между точками.</returns>
         public static double GetLengthBetweenPoints(Point startPoint, Point finishPoint)
         {
-            var axisValues = GetDifferenceOfAxis(startPoint, finishPoint);
-            var squareXDifference = Math.Pow(axisValues.xDifferenct, 2);
-            var squareYDifference = Math.Pow(axisValues.yDifference, 2);
+            var (xDifferenct, yDifference) = GetDifferenceOfAxis(startPoint, finishPoint);
+            var squareXDifference = Math.Pow(xDifferenct, 2);
+            var squareYDifference = Math.Pow(yDifference, 2);
             var side = Math.Pow(squareXDifference + squareYDifference, 0.5);
             return side;
         }
 
-        
+        /// <summary>
+        /// Оператор сравнения двух точек. Сравнение
+        /// идёт по значениям на осях OX, OY.
+        /// </summary>
+        /// <param name="left">Левый операнд.</param>
+        /// <param name="right">Правый операнд.</param>
+        /// <returns>Возвращает true в случае равенства значений
+        /// по оси OX, OY. В обратно случае возвращается false.</returns>
+        public static bool operator == (Point left, Point right)
+        {
+            if ((left.AbscissaAxisValue == right.AbscissaAxisValue) && (left.OrdinateAxisValue == right.OrdinateAxisValue))
+            {
+                return true;
+            }
+            return false;
+        }
 
-        
+        public static bool operator !=(Point left, Point right)
+        {
+            return !(left == right);
+        }
+
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace Application.Figures
         private double _radius;
 
 
-        public Circle()
+        public Circle() : base()
         { }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Application.Figures
         /// в качестве диаметра круга.
         /// </summary>
         /// <param name="points">Точки произвольной линии, берущейся в качестве диаметра круга</param>
-        public Circle(Point[] points)
+        public Circle(Point[] points) : base(points)
         {
             _points = points;
             _sideSizes = GetSideSizesFromPoints();

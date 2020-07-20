@@ -1,6 +1,7 @@
 ﻿using Application.Painting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Figures
 {
@@ -14,27 +15,31 @@ namespace Application.Figures
         /// Стороны фигуры.
         /// </summary>
         private protected double[] _sideSizes;
+        /// <summary>
+        /// Цвет фигуры.
+        /// </summary>
+        // private protected readonly FigureColor color;
 
-        public Figure() 
+        protected Figure()
+        { }
+
+        public Figure(FigureMaterial material)
         { }
 
         /// <summary>
         /// Конструктор создания фигуры по значению вершин фигуры.
         /// </summary>
         /// <param name="points">Массив вершин фигуры.</param>
-        public Figure (Point[] points)
+        public Figure (/*FigureMaterial material, */Point[] points)
         {
-            _points = points;
-            _sideSizes = GetSideSizesFromPoints();
+            Points = points;
+            SideSizes = GetSideSizesFromPoints();
         }
 
-        /// <summary>
-        /// Конструктор создания фигуры по значению сторон фигуры.
-        /// </summary>
-        /// <param name="sideSizes">Массив значений сторон фигуры.</param>
-        public Figure (double[] sideSizes)
+
+        public Figure (ISpecificFigure figure)
         {
-            _sideSizes = sideSizes;
+            // figure.
         }
 
         /// <summary>
@@ -48,7 +53,11 @@ namespace Application.Figures
             }
             set
             {
-                _points = value ?? throw new NullReferenceException("Нельзя присвоить координатам null");
+                if (value == null || value.Length == 0)
+                {
+                    throw new NullReferenceException("Нельзя присвоить координатам null");
+                }
+                _points = value; 
             }
         }
 
@@ -63,7 +72,11 @@ namespace Application.Figures
             }
             set
             {
-                _sideSizes = value ?? throw new NullReferenceException("Нельзя присвоить сторонам фигуры null");
+                if (value == null || value.Length == 0)
+                {
+                    throw new NullReferenceException("Нельзя присвоить сторонам фигуры null");
+                }
+                _sideSizes = value;
             }
         }
 
@@ -83,6 +96,7 @@ namespace Application.Figures
         /// Получает массив значений сторон фигуры, основываясь на вершинах фигуры.
         /// </summary>
         /// <returns>Возвращает массив значений сторон фигуры.</returns>
+        
         public double[] GetSideSizesFromPoints()
         {
             // Соединяем первую и последнюю точку
@@ -103,9 +117,8 @@ namespace Application.Figures
 
         public override string ToString()
         {
-            string stringOfPoints = _points == null ? string.Empty : ("Points: " + String.Join<Point>(' ', _points));
-            string stringOfSides = String.Join(' ', _sideSizes);
-            return $" Type: {this.GetType().Name} \n Sides: {stringOfSides} \n {stringOfPoints}";
+            string stringOfPoints = string.Join<Point>(' ', Points);
+            return $" Type: {GetType().Name} \n Points: {stringOfPoints}\n";
         }
 
         public override int GetHashCode()
@@ -118,15 +131,14 @@ namespace Application.Figures
         /// </summary>
         /// <param name="obj">Фигура для сравнения.</param>
         /// <returns></returns>
-        //public override bool Equals(object obj)
-        //{
-        //    if (obj == null || GetType() != obj.GetType())
-        //    {
-        //        return false;
-        //    }
-        //    var figure = obj as Figure;
-        //    var isAreaEquals = GetAreaOfFigure() == figure.GetAreaOfFigure();
-        //    return isAreaEquals;
-        //}
+        public override bool Equals(object obj)
+        {
+            if (obj is Figure figure)
+            {
+                var result = Enumerable.SequenceEqual(Points, figure.Points);
+                return result;
+            }
+            return false;
+        }
     }
 }

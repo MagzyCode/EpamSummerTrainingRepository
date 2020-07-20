@@ -16,14 +16,8 @@ namespace Application.Figures
         public Polygon(Point[] points) : base(points)
         { }
 
-        /// <summary>
-        /// Инициализирует объект типа Polygon, использую значение сторон n-угольника.
-        /// </summary>
-        /// <param name="sides"></param>
-        public Polygon(double[] sides) : base(sides)
-        { }
 
-        public FigureColor ColorOfFigure { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public FigureColor ColorOfFigure { get; set; }
 
 
         public double GetArea()

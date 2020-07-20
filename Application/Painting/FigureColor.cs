@@ -6,5 +6,16 @@ namespace Application.Painting
 {
     public enum FigureColor
     {
+        NonColor,
+        White,
+        Black,
+        Red,
+        Green,
+        Blue,
+        Yellow,
+        Orange,
+        Purple,
+        Brown,
+        Grey
     }
 }
