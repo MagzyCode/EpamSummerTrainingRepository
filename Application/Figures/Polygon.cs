@@ -7,20 +7,21 @@ namespace Application.Figures
 {
     public class Polygon : Figure, ISpecificFigure
     {
-        private const int NUMBER_OF_MINIMUM_POINTS = 3;
+        public const int NUMBER_OF_MINIMUM_POINTS = 3;
+
+
+        public Polygon(ISpecificFigure figure, Point[] points) : base(figure, points)
+        { }
 
         /// <summary>
         /// Инициализирует объект типа Polygon, использую значение вершин n-угольника.
         /// </summary>
         /// <param name="points">Значения вершин n-угольника.</param>
-        public Polygon(Point[] points) : base(points)
+        public Polygon(FigureMaterial material, Point[] points) : base(material, points)
         { }
 
 
-        public FigureColor ColorOfFigure { get; set; }
-
-
-        public double GetArea()
+        public override double GetArea()
         {
             if (_points.Length < NUMBER_OF_MINIMUM_POINTS)
             {
@@ -44,8 +45,7 @@ namespace Application.Figures
             return result;
         }
 
-
-        public double GetPerimeter()
+        public override double GetPerimeter()
         {
             double perimeter = _sideSizes.Sum();
             return perimeter;

@@ -5,8 +5,9 @@ using System.Linq;
 
 namespace Application.Figures
 {
-    public abstract class Figure
+    public abstract class Figure : ISpecificFigure
     {
+        #region Fields
         /// <summary>
         /// Координты вершин или центра фигуры.
         /// </summary>
@@ -15,32 +16,54 @@ namespace Application.Figures
         /// Стороны фигуры.
         /// </summary>
         private protected double[] _sideSizes;
-        /// <summary>
-        /// Цвет фигуры.
-        /// </summary>
-        // private protected readonly FigureColor color;
 
+        #endregion
+
+        #region Constructors
         protected Figure()
         { }
 
-        public Figure(FigureMaterial material)
-        { }
+        protected Figure(FigureMaterial material)
+        {
+            ColorOfFigure = GetFigureColor(material);
+        }
 
         /// <summary>
-        /// Конструктор создания фигуры по значению вершин фигуры.
+        /// Инициализирует объект типа Figure, основываясь на материале,
+        /// из которого будет сделана фигура и точкам на этом материале.
         /// </summary>
-        /// <param name="points">Массив вершин фигуры.</param>
-        public Figure (/*FigureMaterial material, */Point[] points)
+        /// <param name="material">Материал для фигуры.</param>
+        /// <param name="points">Точки для вырезания</param>
+        public Figure (FigureMaterial material, Point[] points) : this(material)
         {
             Points = points;
             SideSizes = GetSideSizesFromPoints();
+            Perimeter = GetPerimeter();
+            Area = GetArea();
         }
 
-
-        public Figure (ISpecificFigure figure)
+        /// <summary>
+        /// Инициализирует объект типа Figure, использующая 
+        /// существующую фигуру и новые точки для вырезания.
+        /// </summary>
+        /// <param name="figure">Исходная фигура.</param>
+        /// <param name="newPoints">Точки, для вырезания новой фигуры.</param>
+        public Figure (ISpecificFigure figure, Point[] newPoints)
         {
-            // figure.
+            Points = newPoints;
+            Area = GetArea() < figure.GetArea() 
+                    ? figure.Area 
+                    : throw new Exception("Вырезаемая фигура должна быть меньше исходной.");
+            Perimeter = figure.Perimeter;
+            SideSizes = GetSideSizesFromPoints();
+            ColorOfFigure = figure.ColorOfFigure;
+            IsFigureDyed = figure.IsFigureDyed;
+            
         }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Массив точек фигуры.
@@ -60,7 +83,6 @@ namespace Application.Figures
                 _points = value; 
             }
         }
-
         /// <summary>
         /// Массив длин сторон фигуры.
         /// </summary>
@@ -79,25 +101,39 @@ namespace Application.Figures
                 _sideSizes = value;
             }
         }
+        /// <summary>
+        /// Показывает цвет фигуры.
+        /// </summary>
+        public FigureColor ColorOfFigure { get; private set; }
+        /// <summary>
+        /// Указывает, окрашивали ли фигуру. Если фигуру невозможно
+        /// окрасить, возвращает null;
+        /// </summary>
+        public bool? IsFigureDyed { get; private set; } = false;
+        public double Area { get; private set; }
+        public double Perimeter { get; private set; }
+
+        #endregion
+
+        #region Methods
 
         ///// <summary>
         ///// Получает площадь фигуры.
         ///// </summary>
         ///// <returns>Возвращает площадь фигуры.</returns>
-        //public abstract double GetAreaOfFigure();
+        public abstract double GetArea();
 
         ///// <summary>
         ///// Получает периметр фигуры.
         ///// </summary>
         ///// <returns>Возвращает периметр фигуры.</returns>
-        //public abstract double GetPerimeter();
+        public abstract double GetPerimeter();
 
         /// <summary>
         /// Получает массив значений сторон фигуры, основываясь на вершинах фигуры.
         /// </summary>
         /// <returns>Возвращает массив значений сторон фигуры.</returns>
-        
-        public double[] GetSideSizesFromPoints()
+        public virtual double[] GetSideSizesFromPoints()
         {
             // Соединяем первую и последнюю точку
             double side = Point.GetLengthBetweenPoints(_points[Points.Length - 1], _points[0]);
@@ -113,7 +149,6 @@ namespace Application.Figures
             var arrayOfSides = listOfSides.ToArray();
             return arrayOfSides;
         }
-
 
         public override string ToString()
         {
@@ -140,5 +175,21 @@ namespace Application.Figures
             }
             return false;
         }
+
+        /// <summary>
+        /// Метод задания первоначального цвета для фигуры, 
+        /// используя материал для аппликации.
+        /// </summary>
+        /// <param name="material"></param>
+        /// <returns></returns>
+        private FigureColor GetFigureColor(FigureMaterial material)
+        {
+            var color = material == FigureMaterial.Film
+                    ? FigureColor.Transparent
+                    : FigureColor.PaperDefaultColor;
+            return color;
+        }
+
+        #endregion
     }
 }

@@ -4,7 +4,15 @@ namespace Application.Figures
 {
     public interface ISpecificFigure
     {
-        FigureColor ColorOfFigure { get; set; }
+        Point[] Points { get; }
+
+        FigureColor ColorOfFigure { get; }
+
+        bool? IsFigureDyed { get; }
+
+        double Area { get; }
+
+        double Perimeter { get; }
 
         double GetPerimeter();
 

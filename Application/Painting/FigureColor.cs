@@ -6,7 +6,14 @@ namespace Application.Painting
 {
     public enum FigureColor
     {
-        NonColor,
+        /// <summary>
+        /// Прозрачный цвет. Подходит только для плёнки.
+        /// </summary>
+        Transparent,
+        /// <summary>
+        /// Первоначальный цвет бумаги.
+        /// </summary>
+        PaperDefaultColor,
         White,
         Black,
         Red,

@@ -5,45 +5,50 @@ namespace Application.Figures
 {
     public class Oval : Figure, ISpecificFigure
     {
-        private readonly double _smallDiameter = default;
-        private readonly double _bigDiameter = default;
+        private readonly double _smallDiameter;
+        private readonly double _bigDiameter;
+
+        public Oval(ISpecificFigure figure, Point[] points) : base(figure, points)
+        { }
 
         /// <summary>
-        /// Конструктор создания фигуры "Овал", использую массив точек.
+        /// Конструктор создания фигуры "Овал", использую массив точек и материал.
         /// </summary>
-        /// <param name="points">Точки прямоугольника, в который вписывается овал</param>
-        public Oval(Point[] points)
+        /// <param name="material">Материал фигуры.</param>
+        /// <param name="points">Точки прямоугольника, в который вписывается овал.</param>
+        public Oval(FigureMaterial material, Point[] points) : base(material, points)
         {
-            _points = points;
-            _sideSizes = GetOvalSides();
-            _smallDiameter = _sideSizes[1];
-            _bigDiameter = _sideSizes[0];
+            // Points = points;
+            // SideSizes = GetSideSizesFromPoints();
+            _bigDiameter = SideSizes[0];
+            _smallDiameter = SideSizes[1];
+            
         }
 
         /// <summary>
         /// Конструктор создания овала, использующий центральную 
-        /// точку и значения перпендикулярных радиусов.
+        /// точку, значения перпендикулярных радиусов и материал.
         /// </summary>
+        /// <param name="material">Материал фигуры./param>
         /// <param name="centerPoint">Точка-центр овала.</param>
         /// <param name="smallRadius">Малый радиус овала.</param>
         /// <param name="bigRadius">Большой радиус овала.</param>
-        public Oval(Point centerPoint, double smallRadius, double bigRadius)
+        public Oval(FigureMaterial material, Point centerPoint, double smallRadius, double bigRadius)
+                : base(material)
         {
-            _points = new Point[] { centerPoint };
+            Points = new Point[] { centerPoint };
             _smallDiameter = smallRadius;
             _bigDiameter = bigRadius;
             _sideSizes = new double[] { _smallDiameter, _bigDiameter };
         }
 
-        public FigureColor ColorOfFigure { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public double GetArea()
+        public override double GetArea()
         {
             var area = Math.PI * _smallDiameter * _bigDiameter;
             return area;
         }
 
-        public double GetPerimeter()
+        public override double GetPerimeter()
         {
             var rootPartOfFormula = (_bigDiameter * _bigDiameter +
                     _smallDiameter * _smallDiameter) / 8;
@@ -55,16 +60,16 @@ namespace Application.Figures
         /// Преобразует значения точек в свойстве Points в малый и большой радиусы овала.
         /// </summary>
         /// <returns>Возвращает массив сторон(диаметров) овала</returns>
-        private double[] GetOvalSides()
+        public override double[] GetSideSizesFromPoints()
         {
-            var axisValues = Point.GetDifferenceOfAxis(Points[0], Points[1]);
-            if (axisValues.xDifferenct > axisValues.yDifference)
+            var (xDifferenct, yDifference) = Point.GetDifferenceOfAxis(Points[0], Points[1]);
+            if (xDifferenct > yDifference)
             {
-                return new double[] { axisValues.xDifferenct, axisValues.yDifference };
+                return new double[] { xDifferenct, yDifference };
             }
             else
             {
-                return new double[] { axisValues.yDifference, axisValues.xDifferenct };
+                return new double[] { yDifference, xDifferenct };
             }
         }
 

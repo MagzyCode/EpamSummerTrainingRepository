@@ -10,8 +10,7 @@ namespace Application.Figures
         /// </summary>
         private double _radius;
 
-
-        public Circle() : base()
+        public Circle(ISpecificFigure figure, Point[] points) : base(figure, points)
         { }
 
         /// <summary>
@@ -19,11 +18,9 @@ namespace Application.Figures
         /// в качестве диаметра круга.
         /// </summary>
         /// <param name="points">Точки произвольной линии, берущейся в качестве диаметра круга</param>
-        public Circle(Point[] points) : base(points)
+        public Circle(FigureMaterial material, Point[] points) : base(material, points)
         {
-            _points = points;
-            _sideSizes = GetSideSizesFromPoints();
-            _radius = GetRadius();
+            Radius = GetRadius();
         }
 
         /// <summary>
@@ -32,11 +29,11 @@ namespace Application.Figures
         /// </summary>
         /// <param name="center">Центральная точка круга</param>
         /// <param name="raduis">Радиус круга</param>
-        public Circle(Point center, double raduis)
+        public Circle(FigureMaterial material, Point center, double raduis) : base(material)
         {
-            _points = new Point[] { center };
-            _radius = raduis;
-            _sideSizes = new double[] { _radius * 2 };
+            Points = new Point[] { center };
+            Radius = raduis;
+            SideSizes = new double[] { _radius * 2 };
         }
 
 
@@ -69,17 +66,15 @@ namespace Application.Figures
             }
         }
 
-        public FigureColor ColorOfFigure { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public double GetArea()
+        public override double GetArea()
         {
-            var area = Math.PI * Math.Pow(_radius, 2);
+            var area = Math.PI * Math.Pow(Radius, 2);
             return area;
         }
 
-        public double GetPerimeter()
+        public override double GetPerimeter()
         {
-            var perimeter = 2 * Math.PI * _radius;
+            var perimeter = 2 * Math.PI * Radius;
             return perimeter;
         }
 
@@ -89,7 +84,7 @@ namespace Application.Figures
         /// <returns>Получает радиус круга из его диаметра</returns>
         private double GetRadius()
         {
-            double radius = _sideSizes[0] / 2;
+            double radius = SideSizes[0] / 2;
             return radius;
         }
     }

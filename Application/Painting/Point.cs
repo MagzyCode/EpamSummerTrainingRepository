@@ -107,7 +107,8 @@ namespace Application.Painting
         /// по оси OX, OY. В обратно случае возвращается false.</returns>
         public static bool operator == (Point left, Point right)
         {
-            if ((left.AbscissaAxisValue == right.AbscissaAxisValue) && (left.OrdinateAxisValue == right.OrdinateAxisValue))
+            if ((left.AbscissaAxisValue == right.AbscissaAxisValue) && 
+                    (left.OrdinateAxisValue == right.OrdinateAxisValue))
             {
                 return true;
             }
