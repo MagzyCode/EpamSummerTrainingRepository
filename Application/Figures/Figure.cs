@@ -34,7 +34,7 @@ namespace Application.Figures
         /// </summary>
         /// <param name="material">Материал для фигуры.</param>
         /// <param name="points">Точки для вырезания</param>
-        public Figure (FigureMaterial material, Point[] points) : this(material)
+        public Figure (Point[] points, FigureMaterial material = FigureMaterial.Paper) : this(material)
         {
             Points = points;
             SideSizes = GetSideSizesFromPoints();
@@ -104,7 +104,7 @@ namespace Application.Figures
         /// <summary>
         /// Показывает цвет фигуры.
         /// </summary>
-        public FigureColor ColorOfFigure { get; private set; }
+        public FigureColor ColorOfFigure { get; set; }
         /// <summary>
         /// Указывает, окрашивали ли фигуру. Если фигуру невозможно
         /// окрасить, возвращает null;
@@ -184,13 +184,20 @@ namespace Application.Figures
         /// </summary>
         /// <param name="material"></param>
         /// <returns></returns>
-        private FigureColor GetFigureColor(FigureMaterial material)
+        private FigureColor GetFigureColor(FigureMaterial material) => material switch
         {
-            var color = material == FigureMaterial.Film
-                    ? FigureColor.Transparent
-                    : FigureColor.PaperDefaultColor;
-            return color;
-        }
+            FigureMaterial.NonMaterial => FigureColor.NonColor,
+            FigureMaterial.Film => FigureColor.Transparent,
+            FigureMaterial.Paper => FigureColor.PaperDefaultColor,
+            _ => throw new Exception()
+            //{
+            //    var color = material == FigureMaterial.Film
+            //            ? FigureColor.Transparent
+            //            : FigureColor.PaperDefaultColor;
+            //    return color;
+            //}
+        };
+        
 
         public object Clone()
         {

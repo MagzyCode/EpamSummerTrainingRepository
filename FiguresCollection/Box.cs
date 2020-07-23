@@ -12,7 +12,6 @@ namespace FiguresCollection
         #region Fields
 
         public const int MAX_COUNT_OF_FIGURES = 20;
-        private List<ISpecificFigure> _figures = new List<ISpecificFigure>(MAX_COUNT_OF_FIGURES);
 
         #endregion
 
@@ -26,7 +25,7 @@ namespace FiguresCollection
         {
             get
             {
-                return _figures[index].Clone() as ISpecificFigure;
+                return Figures[index].Clone() as ISpecificFigure;
             }
         }
 
@@ -34,24 +33,13 @@ namespace FiguresCollection
 
         #region Properties
 
-        public List<ISpecificFigure> Figures
-        {
-            get
-            {
-                return _figures;
-            }
-
-            set
-            {
-                _figures = value;
-            }
-        }
+        public List<ISpecificFigure> Figures { get; set; } = new List<ISpecificFigure>(MAX_COUNT_OF_FIGURES);
 
         public int Count
         {
             get
             {
-                return _figures.Count;
+                return Figures.Count;
             }
         }
 
@@ -79,7 +67,7 @@ namespace FiguresCollection
         {
             List<ISpecificFigure> figures = new List<ISpecificFigure>();
 
-            foreach (ISpecificFigure item in _figures)
+            foreach (ISpecificFigure item in Figures)
             {
                 if (item.GetType() == typeof(Circle))
                 {
@@ -94,7 +82,7 @@ namespace FiguresCollection
         {
             List<ISpecificFigure> figures = new List<ISpecificFigure>();
 
-            foreach (ISpecificFigure item in _figures)
+            foreach (ISpecificFigure item in Figures)
             {
                 if (item.ColorOfFigure == FigureColor.Transparent)
                 {
@@ -112,7 +100,7 @@ namespace FiguresCollection
                 throw new Exception("Значение фигуры не может быть null");
             }
 
-            foreach (ISpecificFigure item in _figures)
+            foreach (ISpecificFigure item in Figures)
             {
                 if (item == figure)
                 {
@@ -120,7 +108,7 @@ namespace FiguresCollection
                 }
             }
 
-            _figures.Add(figure);
+            Figures.Add(figure);
         }
 
         public void RemoveFigure(int index)
@@ -130,17 +118,17 @@ namespace FiguresCollection
                 throw new IndexOutOfRangeException();
             }
 
-            _figures.RemoveAt(index);
+            Figures.RemoveAt(index);
         }
 
         public void ReplaceFigure(int index, ISpecificFigure figure)
         {
-            _figures[index] = figure ?? throw new NullReferenceException();
+            Figures[index] = figure ?? throw new NullReferenceException();
         }
 
         public ISpecificFigure Find(Type figureType, FigureColor color)
         {
-            foreach (ISpecificFigure item in _figures)
+            foreach (ISpecificFigure item in Figures)
             {
                 if ((item.GetType() == figureType) && (item.ColorOfFigure == color))
                 {
@@ -153,7 +141,7 @@ namespace FiguresCollection
         private double GetTotalPerimeter()
         {
             var total = 0.0;
-            foreach (ISpecificFigure item in _figures)
+            foreach (ISpecificFigure item in Figures)
             {
                 total += item.GetPerimeter();
             }
@@ -163,7 +151,7 @@ namespace FiguresCollection
         private double GetTotalArea()
         {
             var total = 0.0;
-            foreach (ISpecificFigure item in _figures)
+            foreach (ISpecificFigure item in Figures)
             {
                 total += item.GetArea();
             }

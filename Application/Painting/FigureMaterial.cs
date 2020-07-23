@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Application.Painting
+﻿namespace Application.Painting
 {
     public enum FigureMaterial
     {
+        /// <summary>
+        /// Устанавливается в случае того, когда при создании фигуры
+        /// нам не важен материал, т.к. цвет уже установлен.
+        /// </summary>
+        NonMaterial = -1,
         /// <summary>
         /// Бумага.
         /// </summary>

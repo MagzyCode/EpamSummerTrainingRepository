@@ -42,7 +42,7 @@ namespace Application.Painting
 
         public override string ToString()
         {
-            return $"({AbscissaAxisValue}, {OrdinateAxisValue})";
+            return $"{AbscissaAxisValue},{OrdinateAxisValue}";
         }
 
         /// <summary>

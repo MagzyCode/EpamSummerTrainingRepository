@@ -16,7 +16,7 @@ namespace Application.Figures
         /// </summary>
         /// <param name="material">Материал фигуры.</param>
         /// <param name="points">Точки прямоугольника, в который вписывается овал.</param>
-        public Oval(FigureMaterial material, Point[] points) : base(material, points)
+        public Oval(FigureMaterial material, Point[] points) : base(points, material)
         {
             // Points = points;
             // SideSizes = GetSideSizesFromPoints();

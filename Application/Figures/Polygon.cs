@@ -17,7 +17,7 @@ namespace Application.Figures
         /// Инициализирует объект типа Polygon, использую значение вершин n-угольника.
         /// </summary>
         /// <param name="points">Значения вершин n-угольника.</param>
-        public Polygon(FigureMaterial material, Point[] points) : base(material, points)
+        public Polygon(FigureMaterial material, Point[] points) : base(points, material)
         { }
 
 

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FiguresCollection\FiguresCollection.csproj" />
-    <ProjectReference Include="..\XMLFileAccess\XMLFileAccess.csproj" />
+    <ProjectReference Include="..\XMLFileAccess\XmlFileAccess.csproj" />
   </ItemGroup>
 
 </Project>

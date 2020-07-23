@@ -18,7 +18,7 @@ namespace Application.Figures
         /// в качестве диаметра круга.
         /// </summary>
         /// <param name="points">Точки произвольной линии, берущейся в качестве диаметра круга</param>
-        public Circle(FigureMaterial material, Point[] points) : base(material, points)
+        public Circle(FigureMaterial material, Point[] points) : base(points, material)
         {
             Radius = GetRadius();
         }
