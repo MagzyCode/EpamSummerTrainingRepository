@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Application.Figures
 {
-    public abstract class Figure : ISpecificFigure
+    public abstract class Figure : ICloneable
     {
         #region Fields
         /// <summary>
@@ -162,18 +162,20 @@ namespace Application.Figures
         }
 
         /// <summary>
-        /// Сравнивает две фигуры основываячь на их типе и площади.
+        /// Сравнивает две фигуры основываяcь на их типе и цвете.
         /// </summary>
         /// <param name="obj">Фигура для сравнения.</param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is Figure figure)
-            {
-                var result = Enumerable.SequenceEqual(Points, figure.Points);
-                return result;
-            }
-            return false;
+            //if (obj is Figure figure && figure.GetType() == GetType())
+            //{
+            //    // var result = Enumerable.SequenceEqual(Points, figure.Points);
+            //    var result = figure.ColorOfFigure == ColorOfFigure;
+            //    return result;
+            //}
+            var figure = obj as Figure;
+            return figure == this;
         }
 
         /// <summary>
@@ -188,6 +190,34 @@ namespace Application.Figures
                     ? FigureColor.Transparent
                     : FigureColor.PaperDefaultColor;
             return color;
+        }
+
+        public object Clone()
+        {
+            return Clone();
+        }
+
+        #endregion
+
+        #region Operations
+
+        public static bool operator == (Figure left, Figure right)
+        {
+            if (left == null || right == null)
+            {
+                return false;
+            }
+
+            if (left.GetType() == right.GetType() && left.ColorOfFigure == left.ColorOfFigure)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool operator !=(Figure left, Figure right)
+        {
+            return !(left == right);
         }
 
         #endregion

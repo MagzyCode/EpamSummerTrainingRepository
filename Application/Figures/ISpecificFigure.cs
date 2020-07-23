@@ -1,8 +1,9 @@
 ﻿using Application.Painting;
+using System;
 
 namespace Application.Figures
 {
-    public interface ISpecificFigure
+    public interface ISpecificFigure : ICloneable
     {
         Point[] Points { get; }
 
