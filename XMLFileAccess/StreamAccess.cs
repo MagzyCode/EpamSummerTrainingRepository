@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace XMLFileAccess
+namespace XmlFileAccess
 {
     public class StreamAccess
     {
@@ -25,7 +25,7 @@ namespace XMLFileAccess
         {
             using var stream = new StreamReader(path);
             var listOfFigures = new List<ISpecificFigure>();
-            var xmlAccess = new XMLAccess();
+            var xmlAccess = new XmlAccess();
             var document = new XmlDocument();
             document.Load(stream);
             var root = document.DocumentElement;

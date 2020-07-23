@@ -4,7 +4,7 @@ using FiguresCollection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using XMLFileAccess;
+using XmlFileAccess;
 using Xunit;
 
 namespace ThirdTask.Tests

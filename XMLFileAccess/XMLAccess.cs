@@ -6,9 +6,9 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace XMLFileAccess
+namespace XmlFileAccess
 {
-    public class XMLAccess
+    public class XmlAccess
     {
         public const string myPath = "figures.xml";
 
