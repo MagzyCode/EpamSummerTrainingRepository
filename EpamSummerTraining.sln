@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FiguresCollection", "FiguresCollection\FiguresCollection.csproj", "{33DF9FD9-61D7-4C89-8D3C-F3F168757EF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLFileAccess", "XMLFileAccess\XMLFileAccess.csproj", "{253E7E63-B26A-4559-BC35-4C4C5D906DF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirdTask.Tests", "ThirdTask.Tests\ThirdTask.Tests.csproj", "{0A2433A6-F5D1-4838-91DD-32440F798429}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{33DF9FD9-61D7-4C89-8D3C-F3F168757EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33DF9FD9-61D7-4C89-8D3C-F3F168757EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33DF9FD9-61D7-4C89-8D3C-F3F168757EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{253E7E63-B26A-4559-BC35-4C4C5D906DF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{253E7E63-B26A-4559-BC35-4C4C5D906DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{253E7E63-B26A-4559-BC35-4C4C5D906DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{253E7E63-B26A-4559-BC35-4C4C5D906DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A2433A6-F5D1-4838-91DD-32440F798429}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A2433A6-F5D1-4838-91DD-32440F798429}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A2433A6-F5D1-4838-91DD-32440F798429}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A2433A6-F5D1-4838-91DD-32440F798429}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

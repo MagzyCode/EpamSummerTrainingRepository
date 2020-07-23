@@ -34,6 +34,19 @@ namespace FiguresCollection
 
         #region Properties
 
+        public List<ISpecificFigure> Figures
+        {
+            get
+            {
+                return _figures;
+            }
+
+            set
+            {
+                _figures = value;
+            }
+        }
+
         public int Count
         {
             get
@@ -135,36 +148,6 @@ namespace FiguresCollection
                 }
             }
             return null;
-        }
-
-        public void SaveUsingStreamWriter(string path)
-        {
-
-        }
-
-        public void SaveUsingStreamWriter(string path, FigureMaterial material)
-        {
-
-        }
-
-        public void SaveUsingXMLWriter(string path)
-        {
-
-        }
-
-        public void SaveUsingXMLWriter(string path, FigureMaterial material)
-        {
-
-        }
-
-        public void LoadUsingStreamReader(string path)
-        {
-
-        }
-
-        public void LoadUsingXMLReader(string path)
-        {
-
         }
 
         private double GetTotalPerimeter()
