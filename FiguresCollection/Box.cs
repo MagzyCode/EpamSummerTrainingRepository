@@ -2,6 +2,8 @@
 using Application.Painting;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace FiguresCollection
 {
@@ -60,6 +62,36 @@ namespace FiguresCollection
 
         #region Methods
 
+        public List<ISpecificFigure> GetAllCircles()
+        {
+            List<ISpecificFigure> figures = new List<ISpecificFigure>();
+
+            foreach (ISpecificFigure item in _figures)
+            {
+                if (item.GetType() == typeof(Circle))
+                {
+                    var figure = item.Clone() as ISpecificFigure;
+                    figures.Add(figure);
+                }
+            }
+            return figures;
+        }
+
+        public List<ISpecificFigure> GetAllFilmFigures()
+        {
+            List<ISpecificFigure> figures = new List<ISpecificFigure>();
+
+            foreach (ISpecificFigure item in _figures)
+            {
+                if (item.ColorOfFigure == FigureColor.Transparent)
+                {
+                    var figure = item.Clone() as ISpecificFigure;
+                    figures.Add(figure);
+                }
+            }
+            return figures;
+        }
+
         public void AddFigure(ISpecificFigure figure)
         {
             if (figure == null)
@@ -105,19 +137,34 @@ namespace FiguresCollection
             return null;
         }
 
-        public List<ISpecificFigure> GetAllCircles()
+        public void SaveUsingStreamWriter(string path)
         {
-            List<ISpecificFigure> figures = new List<ISpecificFigure>();
 
-            foreach (ISpecificFigure item in _figures)
-            {
-                if (item.GetType() == typeof(Circle))
-                {
-                    var figure = item.Clone() as ISpecificFigure;
-                    figures.Add(figure);
-                }
-            }
-            return figures;
+        }
+
+        public void SaveUsingStreamWriter(string path, FigureMaterial material)
+        {
+
+        }
+
+        public void SaveUsingXMLWriter(string path)
+        {
+
+        }
+
+        public void SaveUsingXMLWriter(string path, FigureMaterial material)
+        {
+
+        }
+
+        public void LoadUsingStreamReader(string path)
+        {
+
+        }
+
+        public void LoadUsingXMLReader(string path)
+        {
+
         }
 
         private double GetTotalPerimeter()
@@ -140,11 +187,11 @@ namespace FiguresCollection
             return total;
         }
 
-        #endregion
 
-        #region Operation
 
         #endregion
+
+        
 
     }
 }
