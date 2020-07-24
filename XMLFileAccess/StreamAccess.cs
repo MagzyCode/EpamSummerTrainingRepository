@@ -11,17 +11,18 @@ namespace XmlFileAccess
     public static class StreamAccess
     {
         public const string myPath = "figures.xml";
+        public static readonly string documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
+        public static readonly (string start, string end) elementsBlock = ("<figures>", "</figures>");
 
         public static void Save(List<ISpecificFigure> figures , string path = myPath)
         {
-            var documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
-            var (startBlock, endBlock) = ("<figures>", "</figures>");
-            documentStart += startBlock;
+            var document = documentStart;
+            document += elementsBlock.start;
             foreach (var item in figures)
             {
-                WriteElement(item, ref documentStart);               
+                WriteElement(item, ref document);               
             }
-            documentStart += endBlock;
+            document += elementsBlock.end;
 
             using var stream = new StreamWriter(path);
             stream.Write(documentStart);
@@ -29,21 +30,21 @@ namespace XmlFileAccess
 
         public static void Save(List<ISpecificFigure> figures, string path, FigureMaterial material)
         {
-            var documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
-            var (startBlock, endBlock) = ("<figures>", "</figures>");
-            documentStart += startBlock;
+            var document = documentStart;
+            document += elementsBlock.start;
+
             foreach (var item in figures)
             {
                 if (material == FigureMaterial.Film && item.ColorOfFigure == FigureColor.Transparent)
                 {
-                    WriteElement(item, ref documentStart);
+                    WriteElement(item, ref document);
                 }
                 else
                 {
-                    WriteElement(item, ref documentStart);
+                    WriteElement(item, ref document);
                 }
             }
-            documentStart += endBlock;
+            document += elementsBlock.end;
 
             using var stream = new StreamWriter(path);
             stream.Write(documentStart);

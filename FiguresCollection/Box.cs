@@ -3,6 +3,7 @@ using Application.Painting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace FiguresCollection
@@ -33,13 +34,13 @@ namespace FiguresCollection
 
         #region Properties
 
-        public List<ISpecificFigure> Figures { get; set; } = new List<ISpecificFigure>(MAX_COUNT_OF_FIGURES);
+        public ISpecificFigure[] Figures { get; private set; } = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
 
         public int Count
         {
             get
             {
-                return Figures.Count;
+                return Figures.Length;
             }
         }
 
@@ -63,41 +64,47 @@ namespace FiguresCollection
 
         #region Methods
 
-        public List<ISpecificFigure> GetAllCircles()
+        public Circle[] GetAllCircles()
         {
-            List<ISpecificFigure> figures = new List<ISpecificFigure>();
-
-            foreach (ISpecificFigure item in Figures)
+            var circles = new Circle[MAX_COUNT_OF_FIGURES];
+            var counter = 0;
+            for (int i = 0; i < Count; i++)
             {
-                if (item.GetType() == typeof(Circle))
+                if (Figures[i] is Circle circle)
                 {
-                    var figure = item.Clone() as ISpecificFigure;
-                    figures.Add(figure);
+                    circles[counter++] = circle;
+                    RemoveFigure(i);
                 }
             }
-            return figures;
+
+            var numberOfElements = circles.Length;
+            Array.Resize(ref circles, numberOfElements);
+            return circles;
         }
 
-        public List<ISpecificFigure> GetAllFilmFigures()
+        public ISpecificFigure[] GetAllFilmFigures()
         {
-            List<ISpecificFigure> figures = new List<ISpecificFigure>();
-
-            foreach (ISpecificFigure item in Figures)
+            var figures = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
+            var counter = 0;
+            for (int i = 0; i < Count; i++)
             {
-                if (item.ColorOfFigure == FigureColor.Transparent)
+                if (Figures[i].ColorOfFigure == FigureColor.Transparent)
                 {
-                    var figure = item.Clone() as ISpecificFigure;
-                    figures.Add(figure);
+                    figures[counter++] = Figures[i];
+                    RemoveFigure(i);
                 }
             }
+                
+            var numberOfElements = figures.Length;
+            Array.Resize(ref figures, numberOfElements);
             return figures;
         }
 
         public void AddFigure(ISpecificFigure figure)
         {
-            if (figure == null)
+            if ((figure == null) || (Count == MAX_COUNT_OF_FIGURES))
             {
-                throw new Exception("Значение фигуры не может быть null");
+                throw new Exception("Невозможно добавить фигуру");
             }
 
             foreach (ISpecificFigure item in Figures)
@@ -108,7 +115,7 @@ namespace FiguresCollection
                 }
             }
 
-            Figures.Add(figure);
+            Figures[Count] = figure;
         }
 
         public void RemoveFigure(int index)
@@ -117,8 +124,7 @@ namespace FiguresCollection
             {
                 throw new IndexOutOfRangeException();
             }
-
-            Figures.RemoveAt(index);
+            Array.Copy(Figures, index + 1, Figures, index + 1, Count - index);
         }
 
         public void ReplaceFigure(int index, ISpecificFigure figure)
@@ -157,8 +163,6 @@ namespace FiguresCollection
             }
             return total;
         }
-
-
 
         #endregion
 

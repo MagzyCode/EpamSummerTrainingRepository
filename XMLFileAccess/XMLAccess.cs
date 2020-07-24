@@ -70,10 +70,6 @@ namespace XmlFileAccess
             return figures;
         }
 
-        
-
-
-
         private static void WriteElement(ISpecificFigure figure, XmlWriter xmlWriter)
         {
             xmlWriter.WriteStartElement("figure");

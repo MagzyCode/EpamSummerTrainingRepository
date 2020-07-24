@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Application.Figures
 {
-    public abstract class Figure : ICloneable
+    public abstract class Figure : ICloneable, ISpecificFigure
     {
         #region Fields
         /// <summary>
@@ -53,7 +53,7 @@ namespace Application.Figures
             Points = newPoints;
             Area = GetArea() < figure.GetArea() 
                     ? figure.Area 
-                    : throw new Exception("Вырезаемая фигура должна быть меньше исходной.");
+                    : throw new CuttingNotPossibleException();
             Perimeter = figure.Perimeter;
             SideSizes = GetSideSizesFromPoints();
             ColorOfFigure = figure.ColorOfFigure;
@@ -83,6 +83,7 @@ namespace Application.Figures
                 _points = value; 
             }
         }
+
         /// <summary>
         /// Массив длин сторон фигуры.
         /// </summary>
@@ -101,15 +102,17 @@ namespace Application.Figures
                 _sideSizes = value;
             }
         }
+
         /// <summary>
         /// Показывает цвет фигуры.
         /// </summary>
         public FigureColor ColorOfFigure { get; set; }
+
         /// <summary>
         /// Указывает, окрашивали ли фигуру. Если фигуру невозможно
         /// окрасить, возвращает null;
         /// </summary>
-        public bool? IsFigureDyed { get; private set; } = false;
+        public bool? IsFigureDyed { get; set; } = false;
         public double Area { get; private set; }
         public double Perimeter { get; private set; }
 
@@ -130,24 +133,31 @@ namespace Application.Figures
         public abstract double GetPerimeter();
 
         /// <summary>
-        /// Получает массив значений сторон фигуры, основываясь на вершинах фигуры.
+        /// Получает массив значений сторон фигуры, 
+        /// последовательно обходя все вершины фигуры.
         /// </summary>
         /// <returns>Возвращает массив значений сторон фигуры.</returns>
         public virtual double[] GetSideSizesFromPoints()
         {
             // Соединяем первую и последнюю точку
-            double side = Point.GetLengthBetweenPoints(_points[Points.Length - 1], _points[0]);
+            var indexOfLastPoint = Points.Length - 1;
+            double side = Point.GetLengthBetweenPoints(Points[indexOfLastPoint], Points[0]);
             var listOfSides = new List<double> { side };
             if (Points.Length >= 2)
             {
                 for (int counter = 0; counter < Points.Length - 1; counter++)
                 {
-                    side = Point.GetLengthBetweenPoints(_points[counter], _points[counter + 1]);
+                    side = Point.GetLengthBetweenPoints(Points[counter], Points[counter + 1]);
                     listOfSides.Add(side);
                 }
             }
             var arrayOfSides = listOfSides.ToArray();
             return arrayOfSides;
+        }
+
+        public object Clone()
+        {
+            return Clone();
         }
 
         public override string ToString()
@@ -167,13 +177,7 @@ namespace Application.Figures
         /// <param name="obj">Фигура для сравнения.</param>
         /// <returns></returns>
         public override bool Equals(object obj)
-        {
-            //if (obj is Figure figure && figure.GetType() == GetType())
-            //{
-            //    // var result = Enumerable.SequenceEqual(Points, figure.Points);
-            //    var result = figure.ColorOfFigure == ColorOfFigure;
-            //    return result;
-            //}
+        { 
             var figure = obj as Figure;
             return figure == this;
         }
@@ -190,19 +194,7 @@ namespace Application.Figures
             FigureMaterial.Film => FigureColor.Transparent,
             FigureMaterial.Paper => FigureColor.PaperDefaultColor,
             _ => throw new Exception()
-            //{
-            //    var color = material == FigureMaterial.Film
-            //            ? FigureColor.Transparent
-            //            : FigureColor.PaperDefaultColor;
-            //    return color;
-            //}
         };
-        
-
-        public object Clone()
-        {
-            return Clone();
-        }
 
         #endregion
 
@@ -210,12 +202,12 @@ namespace Application.Figures
 
         public static bool operator == (Figure left, Figure right)
         {
-            if (left == null || right == null)
+            if ((left == null) || (right == null))
             {
                 return false;
             }
 
-            if (left.GetType() == right.GetType() && left.ColorOfFigure == left.ColorOfFigure)
+            if ((left.GetType() == right.GetType()) && (left.ColorOfFigure == left.ColorOfFigure))
             {
                 return true;
             }

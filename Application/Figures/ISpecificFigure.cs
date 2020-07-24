@@ -5,11 +5,11 @@ namespace Application.Figures
 {
     public interface ISpecificFigure : ICloneable
     {
-        Point[] Points { get; }
+        Point[] Points { get; set; }
 
-        FigureColor ColorOfFigure { get; }
+        FigureColor ColorOfFigure { get; set; }
 
-        bool? IsFigureDyed { get; }
+        bool? IsFigureDyed { get; set; }
 
         double Area { get; }
 
