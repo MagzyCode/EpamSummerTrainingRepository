@@ -3,29 +3,56 @@ using Application.Painting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 
 namespace XmlFileAccess
 {
-    public class StreamAccess
+    public static class StreamAccess
     {
         public const string myPath = "figures.xml";
 
-        public void Save(string path)
+        public static void Save(List<ISpecificFigure> figures , string path = myPath)
         {
-            
+            var documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
+            var (startBlock, endBlock) = ("<figures>", "</figures>");
+            documentStart += startBlock;
+            foreach (var item in figures)
+            {
+                WriteElement(item, ref documentStart);               
+            }
+            documentStart += endBlock;
+
+            using var stream = new StreamWriter(path);
+            stream.Write(documentStart);
         }
 
-        public void Save(string path, FigureMaterial material)
+        public static void Save(List<ISpecificFigure> figures, string path, FigureMaterial material)
         {
+            var documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
+            var (startBlock, endBlock) = ("<figures>", "</figures>");
+            documentStart += startBlock;
+            foreach (var item in figures)
+            {
+                if (material == FigureMaterial.Film && item.ColorOfFigure == FigureColor.Transparent)
+                {
+                    WriteElement(item, ref documentStart);
+                }
+                else
+                {
+                    WriteElement(item, ref documentStart);
+                }
+            }
+            documentStart += endBlock;
 
+            using var stream = new StreamWriter(path);
+            stream.Write(documentStart);
         }
 
-        public List<ISpecificFigure> LoadFile(string path = myPath)
+        public static List<ISpecificFigure> LoadFile(string path = myPath)
         {
             using var stream = new StreamReader(path);
             var listOfFigures = new List<ISpecificFigure>();
-            var xmlAccess = new XmlAccess();
             var document = new XmlDocument();
             document.Load(stream);
             var root = document.DocumentElement;
@@ -37,11 +64,19 @@ namespace XmlFileAccess
                     string type = xnode.Attributes.GetNamedItem("type").Value;
                     string points = xnode.Attributes.GetNamedItem("points").Value;
                     string color = xnode.Attributes.GetNamedItem("color").Value;
-                    var figure = xmlAccess.FigureParse(type, points, color);
+                    var figure = XmlParser.FigureParse(type, points, color);
                     listOfFigures.Add(figure);
                 }
             }
             return listOfFigures;
+        }
+
+        private static void WriteElement(ISpecificFigure figure, ref string document)
+        {
+            var type = figure.GetType().Name;
+            var stringOfPoints = string.Join<Point>(',', figure.Points);
+            var color = figure.ColorOfFigure.ToString();
+            document += $"<figure type=\"{type}\" points=\"{stringOfPoints}\" color = \"{color}\" />";
         }
     }
 }

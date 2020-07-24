@@ -35,11 +35,13 @@ namespace ThirdTask.Tests
             };
 
             var result = box.Figures;
+            StreamAccess.Save(result);
+            var hey = StreamAccess.LoadFile();
             // var i = new XMLAccess();
             // i.Save(result);
 
-            var i = new StreamAccess();
-            var j = i.LoadFile();
+            // var i = new StreamAccess();
+            // var j = i.LoadFile();
             //i.LoadFile("figures.xml", out result);
 
             Assert.Equal(expected, true);

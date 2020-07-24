@@ -8,11 +8,11 @@ using System.Xml;
 
 namespace XmlFileAccess
 {
-    public class XmlAccess
+    public static class XmlAccess
     {
         public const string myPath = "figures.xml";
 
-        public void Save(List<ISpecificFigure> figures, string path = myPath)
+        public static void Save(List<ISpecificFigure> figures, string path = myPath)
         {
             using var xmlWriter = XmlWriter.Create(path);
             xmlWriter.WriteStartDocument();
@@ -26,7 +26,7 @@ namespace XmlFileAccess
             xmlWriter.WriteEndDocument();
         }
 
-        public void Save(List<ISpecificFigure> figures, FigureMaterial material, string path = myPath)
+        public static void Save(List<ISpecificFigure> figures, FigureMaterial material, string path = myPath)
         {
             using var xmlWriter = XmlWriter.Create(path);
             xmlWriter.WriteStartDocument();
@@ -47,9 +47,7 @@ namespace XmlFileAccess
             xmlWriter.WriteEndDocument();
         }
 
-        
-
-        public List<ISpecificFigure> LoadFile(string path, List<ISpecificFigure> figures)
+        public static List<ISpecificFigure> LoadFile(string path, List<ISpecificFigure> figures)
         {
             using var stream = new FileStream(path, FileMode.OpenOrCreate);
             XmlReader xmlReader = XmlReader.Create(stream);
@@ -64,7 +62,7 @@ namespace XmlFileAccess
                         var figureType = xmlReader.GetAttribute("type");
                         var figurePoints = xmlReader.GetAttribute("points");
                         var figureColor = xmlReader.GetAttribute("color");
-                        ISpecificFigure figure = FigureParse(figureType, figurePoints, figureColor);
+                        ISpecificFigure figure = XmlParser.FigureParse(figureType, figurePoints, figureColor);
                         figures.Add(figure);
                     }
                 }
@@ -72,38 +70,11 @@ namespace XmlFileAccess
             return figures;
         }
 
-        public ISpecificFigure FigureParse(string type, string points, string color)
-        {
-            var figurePoints = points.Split(',');
-            List<Point> listOfPoints = new List<Point>();
-
-            for (int counter = 0; counter < figurePoints.Length; counter += 2)
-            {
-                var firstNumber = Convert.ToDouble(figurePoints[counter]);
-                var secondNumber = Convert.ToDouble(figurePoints[counter + 1]);
-                listOfPoints.Add(new Point(firstNumber, secondNumber));
-            }
-            var arrayOfPoints = listOfPoints.ToArray();
-
-            var figureColor = (FigureColor)Enum.Parse(typeof(FigureColor), color);
-
-            var result = GetSpecificFigure(arrayOfPoints, figureColor, type);
-            return result;
-        }
+        
 
 
 
-        public ISpecificFigure GetSpecificFigure(Point[] points, FigureColor color, string type) => type switch
-        {
-            "Circle" => new Circle(FigureMaterial.NonMaterial, points) { ColorOfFigure = color},
-            "Oval" => new Oval(FigureMaterial.NonMaterial, points) { ColorOfFigure = color},
-            "Polygon" => new Polygon(FigureMaterial.NonMaterial, points) { ColorOfFigure = color},
-            _ => throw new Exception()
-        };
-
-
-
-        private void WriteElement(ISpecificFigure figure, XmlWriter xmlWriter)
+        private static void WriteElement(ISpecificFigure figure, XmlWriter xmlWriter)
         {
             xmlWriter.WriteStartElement("figure");
             var type = figure.GetType().Name;
