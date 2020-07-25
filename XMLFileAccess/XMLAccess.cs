@@ -1,5 +1,6 @@
 ﻿using Application.Figures;
 using Application.Painting;
+using FiguresCollection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,7 @@ namespace XmlFileAccess
     {
         public const string myPath = "figures.xml";
 
-        public static void Save(List<ISpecificFigure> figures, string path = myPath)
+        public static void Save(ISpecificFigure[] figures, string path = myPath)
         {
             using var xmlWriter = XmlWriter.Create(path);
             xmlWriter.WriteStartDocument();
@@ -26,7 +27,7 @@ namespace XmlFileAccess
             xmlWriter.WriteEndDocument();
         }
 
-        public static void Save(List<ISpecificFigure> figures, FigureMaterial material, string path = myPath)
+        public static void Save(ISpecificFigure[] figures, FigureMaterial material, string path = myPath)
         {
             using var xmlWriter = XmlWriter.Create(path);
             xmlWriter.WriteStartDocument();
@@ -47,11 +48,12 @@ namespace XmlFileAccess
             xmlWriter.WriteEndDocument();
         }
 
-        public static List<ISpecificFigure> LoadFile(string path, List<ISpecificFigure> figures)
+        public static ISpecificFigure[] LoadFile(string path)
         {
             using var stream = new FileStream(path, FileMode.OpenOrCreate);
             XmlReader xmlReader = XmlReader.Create(stream);
-            figures = new List<ISpecificFigure>();
+            var figures = new ISpecificFigure[Box.MAX_COUNT_OF_FIGURES];
+            var counter = 0;
             
             while (xmlReader.Read())
             {
@@ -63,7 +65,7 @@ namespace XmlFileAccess
                         var figurePoints = xmlReader.GetAttribute("points");
                         var figureColor = xmlReader.GetAttribute("color");
                         ISpecificFigure figure = XmlParser.FigureParse(figureType, figurePoints, figureColor);
-                        figures.Add(figure);
+                        figures[counter++] = figure;
                     }
                 }
             }

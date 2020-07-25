@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Xunit;
 
 namespace ThirdTask.Tests.BoxTests
 {
-    class TestFigureReplace
+    public class TestFigureReplace
     {
+
     }
 }

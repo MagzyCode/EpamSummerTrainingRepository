@@ -178,8 +178,15 @@ namespace Application.Figures
         /// <returns></returns>
         public override bool Equals(object obj)
         { 
-            var figure = obj as Figure;
-            return figure == this;
+            if (obj is Figure figure)
+            {
+                if ((GetType() == figure.GetType()) && 
+                        (ColorOfFigure == figure.ColorOfFigure))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -200,24 +207,24 @@ namespace Application.Figures
 
         #region Operations
 
-        public static bool operator == (Figure left, Figure right)
-        {
-            if ((left == null) || (right == null))
-            {
-                return false;
-            }
+        //public static bool operator == (Figure left, Figure right)
+        //{
+        //    //if ((left == null) || (right == null))
+        //    //{
+        //    //    return false;
+        //    //}
 
-            if ((left.GetType() == right.GetType()) && (left.ColorOfFigure == left.ColorOfFigure))
-            {
-                return true;
-            }
-            return false;
-        }
+        //    if ((left.GetType() == right.GetType()) && (left.ColorOfFigure == left.ColorOfFigure))
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
-        public static bool operator !=(Figure left, Figure right)
-        {
-            return !(left == right);
-        }
+        //public static bool operator !=(Figure left, Figure right)
+        //{
+        //    return !(left == right);
+        //}
 
         #endregion
     }

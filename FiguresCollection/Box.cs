@@ -34,13 +34,14 @@ namespace FiguresCollection
 
         #region Properties
 
-        public ISpecificFigure[] Figures { get; private set; } = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
+        public ISpecificFigure[] Figures { get; set; } = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
 
         public int Count
         {
             get
             {
-                return Figures.Length;
+                GetLastElementIndex(out int index);
+                return index;
             }
         }
 
@@ -102,7 +103,7 @@ namespace FiguresCollection
 
         public void AddFigure(ISpecificFigure figure)
         {
-            if ((figure == null) || (Count == MAX_COUNT_OF_FIGURES))
+            if (figure == null)
             {
                 throw new Exception("Невозможно добавить фигуру");
             }
@@ -162,6 +163,19 @@ namespace FiguresCollection
                 total += item.GetArea();
             }
             return total;
+        }
+
+        private void GetLastElementIndex(out int index)
+        {
+            index = 0;
+            for (int counter = 0; counter < MAX_COUNT_OF_FIGURES; counter++)
+            {
+                if (Figures[counter] == null)
+                {
+                    index = counter;
+                    return;
+                }
+            }
         }
 
         #endregion
