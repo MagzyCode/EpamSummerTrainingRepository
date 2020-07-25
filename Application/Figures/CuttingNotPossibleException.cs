@@ -7,8 +7,6 @@ namespace Application.Figures
     class CuttingNotPossibleException : Exception
     {
         public CuttingNotPossibleException() : base("Невозможно вырезать фигуру")
-        {
-
-        }
+        { }
     }
 }

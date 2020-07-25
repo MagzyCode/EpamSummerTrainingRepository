@@ -18,11 +18,8 @@ namespace Application.Figures
         /// <param name="points">Точки прямоугольника, в который вписывается овал.</param>
         public Oval(FigureMaterial material, Point[] points) : base(points, material)
         {
-            // Points = points;
-            // SideSizes = GetSideSizesFromPoints();
             _bigDiameter = SideSizes[0];
-            _smallDiameter = SideSizes[1];
-            
+            _smallDiameter = SideSizes[1];   
         }
 
         /// <summary>
@@ -59,11 +56,10 @@ namespace Application.Figures
         /// <summary>
         /// Преобразует значения точек в свойстве Points в малый и большой радиусы овала.
         /// </summary>
-        /// <returns>Возвращает массив сторон(диаметров) овала</returns>
+        /// <returns>Возвращает массив сторон(диаметров) овала.</returns>
         public override double[] GetSideSizesFromPoints()
         {
             var (xDifferenct, yDifference) = (_bigDiameter, _smallDiameter);
-               // .GetDifferenceOfAxis(Points[0], Points[1]);
             if (xDifferenct > yDifference)
             {
                 return new double[] { xDifferenct, yDifference };

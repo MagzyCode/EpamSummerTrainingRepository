@@ -8,6 +8,7 @@ namespace XmlFileAccess
 {
     public static class XmlParser
     {
+        public const int MAX_ELEMENTS_IN_BLOCK = 20;
         public static ISpecificFigure FigureParse(string type, string points, string color)
         {
             var figurePoints = points.Split(',');
@@ -22,18 +23,24 @@ namespace XmlFileAccess
             var arrayOfPoints = listOfPoints.ToArray();
 
             var figureColor = (FigureColor)Enum.Parse(typeof(FigureColor), color);
+            var material = XmlParser.GetMaterialFromColor(figureColor);
 
-            var result = GetSpecificFigure(arrayOfPoints, figureColor, type);
+            var result = GetSpecificFigure(arrayOfPoints, figureColor, type, material);
             return result;
         }
 
-
-
-        public static ISpecificFigure GetSpecificFigure(Point[] points, FigureColor color, string type) => type switch
+        public static FigureMaterial GetMaterialFromColor(FigureColor color) => color switch
         {
-            "Circle" => new Circle(FigureMaterial.NonMaterial, points) { ColorOfFigure = color },
-            "Oval" => new Oval(FigureMaterial.NonMaterial, points) { ColorOfFigure = color },
-            "Polygon" => new Polygon(FigureMaterial.NonMaterial, points) { ColorOfFigure = color },
+            FigureColor.Transparent => FigureMaterial.Film,
+            _ => FigureMaterial.Paper
+        };
+
+        public static ISpecificFigure GetSpecificFigure(Point[] points, FigureColor color, 
+                string type, FigureMaterial material) => type switch
+        {
+            "Circle" => new Circle(material, points) { ColorOfFigure = color },
+            "Oval" => new Oval(material, points) { ColorOfFigure = color },
+            "Polygon" => new Polygon(material, points) { ColorOfFigure = color },
             _ => throw new Exception()
         };
     }

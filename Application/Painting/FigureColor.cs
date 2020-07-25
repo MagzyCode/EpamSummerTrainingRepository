@@ -6,9 +6,8 @@ namespace Application.Painting
 {
     public enum FigureColor
     {
-        NonColor = -1,
         /// <summary>
-        /// Прозрачный цвет. Подходит только для плёнки.
+        /// Прозрачный
         /// </summary>
         Transparent,
         /// <summary>

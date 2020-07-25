@@ -6,7 +6,7 @@ namespace Application.Figures
     public class Circle : Figure, ISpecificFigure
     {
         /// <summary>
-        /// Значение радиуса круга
+        /// Значение радиуса круга.
         /// </summary>
         private double _radius;
 
@@ -17,7 +17,7 @@ namespace Application.Figures
         /// Инициализирует сущность Circle, использую точки произвольной линии
         /// в качестве диаметра круга.
         /// </summary>
-        /// <param name="points">Точки произвольной линии, берущейся в качестве диаметра круга</param>
+        /// <param name="points">Точки произвольной линии, берущейся в качестве диаметра круга.</param>
         public Circle(FigureMaterial material, Point[] points) : base(points, material)
         {
             Radius = GetRadius();
@@ -25,10 +25,10 @@ namespace Application.Figures
 
         /// <summary>
         /// Инициализирует сущность Circle, используя точку в качестве центра круга,
-        /// также инициализируя его радиус
+        /// также инициализируя его радиус.
         /// </summary>
-        /// <param name="center">Центральная точка круга</param>
-        /// <param name="raduis">Радиус круга</param>
+        /// <param name="center">Центральная точка круга.</param>
+        /// <param name="raduis">Радиус круга.</param>
         public Circle(FigureMaterial material, Point center, double raduis) : base(material)
         {
             Points = new Point[] { center };
@@ -38,7 +38,7 @@ namespace Application.Figures
 
 
         /// <summary>
-        /// Значение радиуса круга
+        /// Значение радиуса круга.
         /// </summary>
         public double Radius
         {
@@ -56,7 +56,7 @@ namespace Application.Figures
         }
 
         /// <summary>
-        /// Значение диаметра круга
+        /// Значение диаметра круга.
         /// </summary>
         public double Diameter
         {
@@ -79,9 +79,9 @@ namespace Application.Figures
         }
 
         /// <summary>
-        /// Метод получения радиуса, использующий значение диагонали
+        /// Метод получения радиуса, использующий значение диагонали.
         /// </summary>
-        /// <returns>Получает радиус круга из его диаметра</returns>
+        /// <returns>Получает радиус круга из его диаметра.</returns>
         private double GetRadius()
         {
             double radius = SideSizes[0] / 2;

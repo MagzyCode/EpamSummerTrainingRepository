@@ -6,11 +6,11 @@ namespace Application.Painting
     public class Point
     {
         /// <summary>
-        /// Значение точки на оси OY
+        /// Значение точки на оси OY.
         /// </summary>
         public double OrdinateAxisValue { get; set; }
         /// <summary>
-        /// Значение точки на оси OX
+        /// Значение точки на оси OX.
         /// </summary>
         public double AbscissaAxisValue { get; set; }
 
@@ -18,8 +18,8 @@ namespace Application.Painting
         /// Конструктор создания "точки" в плоскости с заданными
         /// значениями x и y соотвественно.
         /// </summary>
-        /// <param name="xPoint">Значение точки относительно оси ОX</param>
-        /// <param name="yPoint">Значение точки относительно оси ОY</param>
+        /// <param name="xPoint">Значение точки относительно оси ОX.</param>
+        /// <param name="yPoint">Значение точки относительно оси ОY.</param>
         public Point(double xPoint, double yPoint)
         {
             OrdinateAxisValue = yPoint;

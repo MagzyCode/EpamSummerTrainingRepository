@@ -1,20 +1,22 @@
 ﻿using Application.Figures;
 using Application.Painting;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.Text;
+using XmlFileAccess;
 
 namespace FiguresCollection
 {
     public class Box
     {
         #region Fields
-
+        /// <summary>
+        /// Максимальное количество фигур в коробке.
+        /// </summary>
         public const int MAX_COUNT_OF_FIGURES = 20;
-        private ISpecificFigure[] _figures = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
+        /// <summary>
+        /// Фигуры в коробке.
+        /// </summary>
+        private readonly ISpecificFigure[] _figures = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
 
         #endregion
 
@@ -23,7 +25,12 @@ namespace FiguresCollection
         #endregion
 
         #region Indexer
-
+        /// <summary>
+        /// Индексатор, по обращению к фигурам в коробке
+        /// по номеру, без изъятие из неё.
+        /// </summary>
+        /// <param name="index">Индекс фигуры.</param>
+        /// <returns>Возвращает фигуру по индексу.</returns>
         public ISpecificFigure this[int index]
         {
             get
@@ -35,7 +42,12 @@ namespace FiguresCollection
         #endregion
 
         #region Properties
-
+        /// <summary>
+        /// Возвращает все фигуры из коробки.
+        /// В случае присвоения коробке определённого
+        /// количества фигур, будет занесено только 
+        /// 20 первых фигур.
+        /// </summary>
         public ISpecificFigure[] Figures 
         {
             get
@@ -49,13 +61,25 @@ namespace FiguresCollection
                 Array.Copy(value, 0, _figures, 0, lenght);
             }
 
-        }//{ get; set; } = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
+        }
 
+        /// <summary>
+        /// Возвращает количество фигур, 
+        /// которое находится в коробке сейчас.
+        /// </summary>
         public int Count
         {
             get
             {
-                int index = Figures.Where(i => i != null).Count();
+                // int index = Figures.Where(i => i != null).Count();
+                var index = 0;
+                foreach (var item in Figures)
+                {
+                    if (item != null)
+                    {
+                        index++;
+                    }
+                }
                 return index;
             }
         }
@@ -80,6 +104,11 @@ namespace FiguresCollection
 
         #region Methods
 
+        /// <summary>
+        /// Метод по изъятию все кругов из коробки.
+        /// При этом круги в коробке удаляются.
+        /// </summary>
+        /// <returns>Возвращает все круги из коробки.</returns>
         public Circle[] GetAllCircles()
         {
             var circles = new Circle[MAX_COUNT_OF_FIGURES];
@@ -98,6 +127,10 @@ namespace FiguresCollection
             return circles;
         }
 
+        /// <summary>
+        /// Метод по изъятию всех плёночный фигур.
+        /// </summary>
+        /// <returns>Возвращает все плёночные фигуры из коробки</returns>
         public ISpecificFigure[] GetAllFilmFigures()
         {
             var figures = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
@@ -116,6 +149,10 @@ namespace FiguresCollection
             return figures;
         }
 
+        /// <summary>
+        /// Добавление уникальной по цвету и типу фигуры.
+        /// </summary>
+        /// <param name="figure">Фигура для добавления.</param>
         public void AddFigure(ISpecificFigure figure)
         {
             if (figure == null)
@@ -134,6 +171,10 @@ namespace FiguresCollection
             Figures[Count] = figure;
         }
 
+        /// <summary>
+        /// Удаление фигуры из коробки по заданному индексу.
+        /// </summary>
+        /// <param name="index">Индекс удаляемой фигуры.</param>
         public void RemoveFigure(int index)
         {
             if ((index >= MAX_COUNT_OF_FIGURES) || (index < 0))
@@ -143,11 +184,22 @@ namespace FiguresCollection
             Array.Copy(Figures, index + 1, Figures, index, Count - index);
         }
 
+        /// <summary>
+        /// Замена фигур.
+        /// </summary>
+        /// <param name="index">Индекс заменяемой фигуры.</param>
+        /// <param name="figure">Новая фигура.</param>
         public void ReplaceFigure(int index, ISpecificFigure figure)
         {
             Figures[index] = figure ?? throw new NullReferenceException();
         }
 
+        /// <summary>
+        /// Нахождение фигуры по характеристикам.
+        /// </summary>
+        /// <param name="figureType">Тип фигуры.</param>
+        /// <param name="color">Цвет фигуры.</param>
+        /// <returns></returns>
         public ISpecificFigure Find(Type figureType, FigureColor color)
         {
             foreach (ISpecificFigure item in Figures)
@@ -160,6 +212,73 @@ namespace FiguresCollection
             return null;
         }
 
+        /// <summary>
+        /// Метод сохранения фигур из коробки в файл,
+        /// используя StreamWriter.
+        /// </summary>
+        /// <param name="path">Путь к файлу сохранения.</param>
+        public void SaveFiguresUsingStreamWriter(string path = StreamAccess.myPath)
+        {
+            StreamAccess.Save(Figures, path);
+        }
+
+        /// <summary>
+        /// Метод сохранения фигур, учитывая их материал,
+        /// из коробки в файл, используя StreamWriter.
+        /// </summary>
+        /// <param name="material">Материал для сохранения.</param>
+        /// <param name="path">Путь к файлу.</param>
+        public void SaveFiguresUsingStreamWriter(FigureMaterial material, string path = StreamAccess.myPath)
+        {
+            StreamAccess.Save(Figures, material, path);
+        }
+
+        /// <summary>
+        /// Метод загрузки фигур из файла
+        /// в фигуру, используя StreamReader.
+        /// </summary>
+        /// <param name="path">Путь к файлу изъятия.</param>
+        public void LoadFiguresUsingStreamReader(string path = StreamAccess.myPath)
+        {
+            Figures = StreamAccess.LoadFile(path);
+        }
+
+        /// <summary>
+        /// Метод сохранения фигур из коробки в файл,
+        /// используя XmlWriter.
+        /// </summary>
+        /// <param name="path">Путь к файлу сохранения.</param>
+        public void SaveFiguresUsingXmlWriter(string path = XmlAccess.myPath)
+        {
+            XmlAccess.Save(Figures, path);
+        }
+
+        /// <summary>
+        /// Метод сохранения фигур, учитывая их материал,
+        /// из коробки в файл, используя XmlWriter.
+        /// </summary>
+        /// <param name="material">Материал для сохранения.</param>
+        /// <param name="path">Путь к файлу.</param>
+        public void SaveFiguresUsingXmlWriter(FigureMaterial material, string path = XmlAccess.myPath)
+        {
+            XmlAccess.Save(Figures, material, path);
+        }
+
+        /// <summary>
+        /// Метод загрузки фигур из файла
+        /// в фигуру, используя XmlReader.
+        /// </summary>
+        /// <param name="path">Путь к файлу изъятия.</param>
+        public void LoadFiguresUsingXmlReader(string path = XmlAccess.myPath)
+        {
+            Figures = XmlAccess.LoadFile(path);
+        }
+
+        /// <summary>
+        /// Метод получения суммы всех
+        /// периметров фигур в коробке.
+        /// </summary>
+        /// <returns>Общий периметр.</returns>
         private double GetTotalPerimeter()
         {
             var total = 0.0;
@@ -174,6 +293,11 @@ namespace FiguresCollection
             return total;
         }
 
+        /// <summary>
+        /// Метод получения суммы всех
+        /// площадей фигур в коробке.
+        /// </summary>
+        /// <returns>Общую площадь.</returns>
         private double GetTotalArea()
         {
             double total = 0.0;
@@ -186,19 +310,6 @@ namespace FiguresCollection
                 total += item.GetArea();
             }
             return total;
-        }
-
-        private void GetLastElementIndex(out int index)
-        {
-            index = 0;
-            for (int counter = 0; counter < MAX_COUNT_OF_FIGURES; counter++)
-            {
-                if (Figures[counter] == null)
-                {
-                    index = counter;
-                    return;
-                }
-            }
         }
 
         #endregion

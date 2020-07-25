@@ -1,11 +1,7 @@
 ﻿using Application.Figures;
 using Application.Painting;
-using FiguresCollection;
-using System;
-using System.Collections.Generic;
+// using FiguresCollection;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 
 namespace XmlFileAccess
@@ -13,7 +9,7 @@ namespace XmlFileAccess
     public static class StreamAccess
     {
         public const string myPath = "figuresStream.xml";
-        public static readonly string documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
+        public static readonly string documentStart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         public static readonly (string start, string end) elementsBlock = ("<figures>", "</figures>");
 
         public static void Save(ISpecificFigure[] figures , string path = myPath)
@@ -61,7 +57,7 @@ namespace XmlFileAccess
         public static ISpecificFigure[] LoadFile(string path = myPath)
         {
             using var stream = new StreamReader(path);
-            var arrayOfFigures = new ISpecificFigure[Box.MAX_COUNT_OF_FIGURES];
+            var arrayOfFigures = new ISpecificFigure[XmlParser.MAX_ELEMENTS_IN_BLOCK];
             var counter = 0;
             var document = new XmlDocument();
             document.Load(stream);

@@ -11,22 +11,22 @@ namespace Application.Figures
 
 
         public Polygon(ISpecificFigure figure, Point[] points) : base(figure, points)
-        { }
+        {
+            CheckNumberOfPoints(points);
+        }
 
         /// <summary>
         /// Инициализирует объект типа Polygon, использую значение вершин n-угольника.
         /// </summary>
         /// <param name="points">Значения вершин n-угольника.</param>
         public Polygon(FigureMaterial material, Point[] points) : base(points, material)
-        { }
+        {
+            CheckNumberOfPoints(points);
+        }
 
 
         public override double GetArea()
         {
-            if (_points.Length < NUMBER_OF_MINIMUM_POINTS)
-            {
-                return -1.0;
-            }
             List<double> xValues = _points.Select(i => i.AbscissaAxisValue).
                 Concat(new List<double>() { _points[0].AbscissaAxisValue}).
                 ToList();
@@ -49,6 +49,20 @@ namespace Application.Figures
         {
             double perimeter = _sideSizes.Sum();
             return perimeter;
+        }
+
+        /// <summary>
+        /// Метод, проверяющий можно ли создать объект
+        /// типа Polynom. В случае невозможности создания 
+        /// объкта вызывается исключение Exception.
+        /// </summary>
+        /// <param name="points">Точки многоугольник.</param>
+        private void CheckNumberOfPoints(Point[] points)
+        {
+            if (points.Length < NUMBER_OF_MINIMUM_POINTS)
+            {
+                throw new Exception();
+            }
         }
     }
 }

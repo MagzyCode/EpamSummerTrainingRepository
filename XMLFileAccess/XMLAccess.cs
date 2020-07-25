@@ -1,6 +1,6 @@
 ﻿using Application.Figures;
 using Application.Painting;
-using FiguresCollection;
+// using FiguresCollection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,7 +52,7 @@ namespace XmlFileAccess
         {
             using var stream = new FileStream(path, FileMode.OpenOrCreate);
             XmlReader xmlReader = XmlReader.Create(stream);
-            var figures = new ISpecificFigure[Box.MAX_COUNT_OF_FIGURES];
+            var figures = new ISpecificFigure[XmlParser.MAX_ELEMENTS_IN_BLOCK];
             var counter = 0;
             
             while (xmlReader.Read())
@@ -63,7 +63,7 @@ namespace XmlFileAccess
                     {
                         var figureType = xmlReader.GetAttribute("type");
                         var figurePoints = xmlReader.GetAttribute("points");
-                        var figureColor = xmlReader.GetAttribute("color");
+                        var figureColor = xmlReader.GetAttribute("color"); 
                         ISpecificFigure figure = XmlParser.FigureParse(figureType, figurePoints, figureColor);
                         figures[counter++] = figure;
                     }

@@ -11,7 +11,7 @@ namespace ThirdTask.Tests.AplicationTests
     {
         [Fact]
         public void Equals_Circle_Circle_trueexcpected()
-        {
+        { 
             var expected = true;
 
             var first = new Circle(FigureMaterial.Paper, new Point(0, 0), 12) { ColorOfFigure = FigureColor.Blue };
