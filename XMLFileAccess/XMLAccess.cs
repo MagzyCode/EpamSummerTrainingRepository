@@ -11,7 +11,7 @@ namespace XmlFileAccess
 {
     public static class XmlAccess
     {
-        public const string myPath = "figures.xml";
+        public const string myPath = "figuresXml.xml";
 
         public static void Save(ISpecificFigure[] figures, string path = myPath)
         {
@@ -35,11 +35,11 @@ namespace XmlFileAccess
 
             foreach (ISpecificFigure item in figures)
             {
-                if (material == FigureMaterial.Film && item.ColorOfFigure == FigureColor.Transparent)
+                if ((material == FigureMaterial.Film) && (item.ColorOfFigure == FigureColor.Transparent))
                 {
                     WriteElement(item, xmlWriter);
                 }
-                else
+                else if ((material == FigureMaterial.Paper) && (item.ColorOfFigure != FigureColor.Transparent))
                 {
                     WriteElement(item, xmlWriter);
                 }
@@ -48,7 +48,7 @@ namespace XmlFileAccess
             xmlWriter.WriteEndDocument();
         }
 
-        public static ISpecificFigure[] LoadFile(string path)
+        public static ISpecificFigure[] LoadFile(string path = myPath)
         {
             using var stream = new FileStream(path, FileMode.OpenOrCreate);
             XmlReader xmlReader = XmlReader.Create(stream);

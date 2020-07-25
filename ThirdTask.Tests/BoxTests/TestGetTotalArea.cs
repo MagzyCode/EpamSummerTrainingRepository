@@ -1,10 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FiguresCollection;
+using Xunit;
 
 namespace ThirdTask.Tests.BoxTests
 {
-    class TestGetTotalArea
+    public class TestGetTotalArea
     {
+        [Fact]
+        public void GetTotalArea_Circle_540excpected()
+        {
+            var expected = 540.25216010359941;
+
+            var box = new Box { Figures = BoxCreated.figures };
+
+            var actual = box.TotalArea;
+
+            Assert.Equal(expected, actual);
+        }
     }
 }

@@ -62,7 +62,8 @@ namespace Application.Figures
         /// <returns>Возвращает массив сторон(диаметров) овала</returns>
         public override double[] GetSideSizesFromPoints()
         {
-            var (xDifferenct, yDifference) = Point.GetDifferenceOfAxis(Points[0], Points[1]);
+            var (xDifferenct, yDifference) = (_bigDiameter, _smallDiameter);
+               // .GetDifferenceOfAxis(Points[0], Points[1]);
             if (xDifferenct > yDifference)
             {
                 return new double[] { xDifferenct, yDifference };

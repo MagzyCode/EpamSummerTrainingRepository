@@ -2,6 +2,7 @@
 using Application.Painting;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace FiguresCollection
         #region Fields
 
         public const int MAX_COUNT_OF_FIGURES = 20;
+        private ISpecificFigure[] _figures = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
 
         #endregion
 
@@ -34,13 +36,26 @@ namespace FiguresCollection
 
         #region Properties
 
-        public ISpecificFigure[] Figures { get; set; } = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
+        public ISpecificFigure[] Figures 
+        {
+            get
+            {
+                return _figures;
+            }
+
+            set
+            {
+                var lenght = value.Length <= MAX_COUNT_OF_FIGURES ? value.Length : MAX_COUNT_OF_FIGURES;
+                Array.Copy(value, 0, _figures, 0, lenght);
+            }
+
+        }//{ get; set; } = new ISpecificFigure[MAX_COUNT_OF_FIGURES];
 
         public int Count
         {
             get
             {
-                GetLastElementIndex(out int index);
+                int index = Figures.Where(i => i != null).Count();
                 return index;
             }
         }
@@ -78,7 +93,7 @@ namespace FiguresCollection
                 }
             }
 
-            var numberOfElements = circles.Length;
+            var numberOfElements = circles.Where(i => i != null).Count();
             Array.Resize(ref circles, numberOfElements);
             return circles;
         }
@@ -95,8 +110,8 @@ namespace FiguresCollection
                     RemoveFigure(i);
                 }
             }
-                
-            var numberOfElements = figures.Length;
+
+            var numberOfElements = figures.Where(i => i != null).Count();
             Array.Resize(ref figures, numberOfElements);
             return figures;
         }
@@ -125,7 +140,7 @@ namespace FiguresCollection
             {
                 throw new IndexOutOfRangeException();
             }
-            Array.Copy(Figures, index + 1, Figures, index + 1, Count - index);
+            Array.Copy(Figures, index + 1, Figures, index, Count - index);
         }
 
         public void ReplaceFigure(int index, ISpecificFigure figure)
@@ -150,6 +165,10 @@ namespace FiguresCollection
             var total = 0.0;
             foreach (ISpecificFigure item in Figures)
             {
+                if (item == null)
+                {
+                    break;
+                }
                 total += item.GetPerimeter();
             }
             return total;
@@ -157,9 +176,13 @@ namespace FiguresCollection
 
         private double GetTotalArea()
         {
-            var total = 0.0;
+            double total = 0.0;
             foreach (ISpecificFigure item in Figures)
             {
+                if (item == null)
+                {
+                    break;
+                }
                 total += item.GetArea();
             }
             return total;

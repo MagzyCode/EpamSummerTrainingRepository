@@ -11,11 +11,12 @@ namespace ThirdTask.Tests.BoxTests
         [Fact]
         public void Adding_Circle_1excpected()
         {
-            var expected = 1;
+            var expected = BoxCreated.TEST_COUNT + 1;
 
-            var box = new Box();
-            ISpecificFigure figure = new Circle(FigureMaterial.Paper, new Point(0, 0), 2);
-            box.AddFigure(figure);
+            var box = new Box { Figures = BoxCreated.figures };
+            var circle = new Circle(FigureMaterial.Film, new Point[] { BoxCreated.points[0], BoxCreated.points[1] });
+
+            box.AddFigure(circle);
             var actual = box.Count;
 
             Assert.Equal(expected, actual);

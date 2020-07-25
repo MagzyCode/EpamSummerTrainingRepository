@@ -12,7 +12,7 @@ namespace XmlFileAccess
 {
     public static class StreamAccess
     {
-        public const string myPath = "figures.xml";
+        public const string myPath = "figuresStream.xml";
         public static readonly string documentStart = "<?xml version=\"1.0\" encoding=\"utf - 8\"?>";
         public static readonly (string start, string end) elementsBlock = ("<figures>", "</figures>");
 
@@ -46,7 +46,7 @@ namespace XmlFileAccess
                     {
                         WriteElement(item, ref document);
                     }
-                    else
+                    else if ((material == FigureMaterial.Paper) && (item.ColorOfFigure != FigureColor.Transparent))
                     {
                         WriteElement(item, ref document);
                     }
