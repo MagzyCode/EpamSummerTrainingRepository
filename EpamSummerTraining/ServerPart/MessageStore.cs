@@ -6,21 +6,20 @@ namespace FourthTask.ServerPart
 {
     public class MessageStore
     {
-        private readonly List<(DateTime time, string message)> _messages = new List<(DateTime, string)>();
+
+        public List<string> ServerMassages { get; private set; } = new List<string>();
 
         public void Add(string message)
         {
-            _messages.Add((DateTime.Now, message));
+            var massageTimeMark = DateTime.Now;
+            var newServerMassage = $"{massageTimeMark}:{message}";
+            ServerMassages.Add(newServerMassage);
         }
 
         public override string ToString()
         {
-            var result = new StringBuilder();
-            foreach (var item in _messages)
-            {
-                result.Append($"{item.time} - {item.message}");
-            }
-            return result.ToString();
+            var result = string.Join('\n', ServerMassages);
+            return result;
         }
 
 

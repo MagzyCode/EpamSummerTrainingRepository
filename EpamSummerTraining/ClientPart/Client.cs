@@ -7,48 +7,45 @@ namespace FourthTask.ClientPart
 {
     public class Client
     {
-        private readonly TcpClient _tcpClient;
 
-        private event Action<string> Message;
+        private event Action<string> NotifyEvent;
 
-        public Client()
-        { }
+        public NetworkStream ClientConnectionStream { get; private set; }
 
-        public Client(IPAddress address, int port = 9999)
+        public TcpClient TcpClient { get; private set; } = new TcpClient();
+
+        public Client(IPEndPoint endPoint)
         {
-            _tcpClient.Connect(address, port);
-
+            TcpClient.Connect(endPoint);
+            ClientConnectionStream = TcpClient.GetStream();
         }
 
         public Client(TcpListener listener)
         {
-            _tcpClient = listener.AcceptTcpClient();
-        }
-
-        public NetworkStream GetConnectionStream()
-        {
-            var result = _tcpClient.GetStream();
-            return result;
+            TcpClient = listener.AcceptTcpClient();
+            ClientConnectionStream = TcpClient.GetStream();
         }
         
-        public void GetResponse()
+        public string GetResponse()
         {
-            NetworkStream stream = GetConnectionStream();
             var data = new byte[256];
-            int bytes = stream.Read(data, 0, data.Length);
+            int bytes = ClientConnectionStream.Read(data, 0, data.Length);
             string message = Encoding.UTF8.GetString(data, 0, bytes);
-            Message?.Invoke(message);
+            // преобразование строки в новый язык
+            NotifyEvent?.Invoke(message);
+            return message;
         }
 
         public void SentRequest(string request)
         {
-            var stream = GetConnectionStream();
             var data = Encoding.UTF8.GetBytes(request);
-            stream.Write(data, 0, data.Length);
+            ClientConnectionStream.Write(data, 0, data.Length);
         }
 
-        public void AddMessage(Action<string> message) => Message += message;
+        public void Close() => TcpClient.Close();
 
-        public void DeleteMessage(Action<string> message) => Message -= message;
+        public void AddSubscriber(Action<string> message) => NotifyEvent += message;
+
+        public void DeleteSubscriber(Action<string> message) => NotifyEvent -= message;
     }
 }
