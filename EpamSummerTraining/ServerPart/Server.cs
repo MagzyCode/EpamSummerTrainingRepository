@@ -15,7 +15,6 @@ namespace FourthTask.ServerPart
         public Server(IPEndPoint address)
         {
             TcpListener = new TcpListener(address);
-            // _client = TcpListener.AcceptTcpClient();
             NotifyEvent += ServerMessages.Add;   
         }
 

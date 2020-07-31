@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using FourthTask.ClientPart.LanguageTranslator;
 
 namespace FourthTask.ClientPart
 {
@@ -13,6 +14,8 @@ namespace FourthTask.ClientPart
         public NetworkStream ClientConnectionStream { get; private set; }
 
         public TcpClient TcpClient { get; private set; } = new TcpClient();
+
+        public Language MessagesLanguage { get; set; } = Language.English;
 
         public Client(IPEndPoint endPoint)
         {
@@ -31,9 +34,9 @@ namespace FourthTask.ClientPart
             var data = new byte[256];
             int bytes = ClientConnectionStream.Read(data, 0, data.Length);
             string message = Encoding.UTF8.GetString(data, 0, bytes);
-            // преобразование строки в новый язык
-            NotifyEvent?.Invoke(message);
-            return message;
+            string translitMessage = TranslitTranslater.ConvertToTranslit(message, MessagesLanguage);
+            NotifyEvent?.Invoke(translitMessage);
+            return translitMessage;
         }
 
         public void SentRequest(string request)
