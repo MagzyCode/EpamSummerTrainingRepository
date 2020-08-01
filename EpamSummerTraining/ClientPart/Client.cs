@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using FourthTask.ClientPart.LanguageTranslator;
+using FourthTask.ServerPart;
 
 namespace FourthTask.ClientPart
 {
     public class Client
     {
-
         private event Action<string> NotifyEvent;
 
         public NetworkStream ClientConnectionStream { get; private set; }
@@ -17,17 +17,17 @@ namespace FourthTask.ClientPart
 
         public Language MessagesLanguage { get; set; } = Language.English;
 
-        public Client(IPEndPoint endPoint)
+        public Client(string ip = "127.0.0.1", int port = 1)
         {
-            TcpClient.Connect(endPoint);
+            TcpClient.Connect(ip, port);
             ClientConnectionStream = TcpClient.GetStream();
         }
 
-        public Client(TcpListener listener)
-        {
-            TcpClient = listener.AcceptTcpClient();
-            ClientConnectionStream = TcpClient.GetStream();
-        }
+        //public Client(Server server)
+        //{
+        //    TcpClient = server.TcpListener.AcceptTcpClient();
+        //    ClientConnectionStream = TcpClient.GetStream();
+        //}
         
         public string GetResponse()
         {
@@ -45,7 +45,11 @@ namespace FourthTask.ClientPart
             ClientConnectionStream.Write(data, 0, data.Length);
         }
 
-        public void Close() => TcpClient.Close();
+        public void Close()
+        {
+            TcpClient.Close();
+            ClientConnectionStream.Close();
+        }
 
         public void AddSubscriber(Action<string> message) => NotifyEvent += message;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FourthTask.ServerPart
 {
@@ -12,15 +13,18 @@ namespace FourthTask.ServerPart
 
         private event Action<string> NotifyEvent;
 
-        public Server(IPEndPoint address)
+        public Server(string hostname = "127.0.0.1", int port = 1)
         {
-            TcpListener = new TcpListener(address);
-            NotifyEvent += ServerMessages.Add;   
+            ServerIp = IPAddress.Parse(hostname);
+            TcpListener = new TcpListener(ServerIp, port);
+            NotifyEvent += ServerMessages.Add;
         }
 
         public MessageStore ServerMessages { get; private set; } = new MessageStore();
 
         public TcpListener TcpListener { get; private set; }
+
+        public IPAddress ServerIp { get; private set; }
 
         public void Start() => TcpListener.Start();
 
@@ -36,6 +40,7 @@ namespace FourthTask.ServerPart
             if (count != 0)
             {
                 var clientMessage = Encoding.UTF8.GetString(bytes);
+                clientMessage = Regex.Replace(clientMessage, @"\0", "");
                 NotifyEvent?.Invoke(clientMessage);
                 var response = Encoding.UTF8.GetBytes(clientMessage);
                 stream.Write(response, 0, response.Length);

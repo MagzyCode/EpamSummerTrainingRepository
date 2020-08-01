@@ -119,7 +119,7 @@ namespace FourthTask.ClientPart.LanguageTranslator
             'f' => "ф",
             'g' => "дж",
             'h' => "х",
-            'i' => "ай",
+            'i' => "и",
             'j' => "дж",
             'k' => "к",
             'l' => "л",
@@ -142,10 +142,11 @@ namespace FourthTask.ClientPart.LanguageTranslator
 
         public static string ConvertToTranslit(string message, Language language)
         {
+            var lowerMessage = message.ToLower();
             var translitMessage = new StringBuilder();
-            for (int counter = 0; counter < message.Length; counter++)
+            for (int counter = 0; counter < lowerMessage.Length; counter++)
             {
-                var letter = GetTranslitLetter(message[counter], language);
+                var letter = GetTranslitLetter(lowerMessage[counter], language);
                 translitMessage.Append(letter);
             }
 
