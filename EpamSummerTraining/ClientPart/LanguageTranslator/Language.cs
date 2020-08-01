@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FourthTask.ClientPart.LanguageTranslator
+﻿namespace FourthTask.ClientPart.LanguageTranslator
 {
+    /// <summary>
+    /// The enumeration of the languages of the world.
+    /// </summary>
     public enum Language
     {
         English,

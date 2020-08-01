@@ -18,6 +18,7 @@ namespace FourthTask.Tests
             var server = new Server();
             server.Start();
             var client = new Client() { MessagesLanguage = language };
+            server.ApproveСonnection();
             client.SentRequest(message);
             server.Processing();
             string response = client.GetResponse();
