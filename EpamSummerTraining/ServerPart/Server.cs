@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace FourthTask.ServerPart
 {
+    /// <summary>
+    /// It's a kind of server with a dedicated address and port for working with clients.
+    /// </summary>
     public class Server
     {
         /// <summary>
@@ -75,6 +78,7 @@ namespace FourthTask.ServerPart
             if (count != 0)
             {
                 var clientMessage = Encoding.UTF8.GetString(bytes);
+                // Removes empty cells.
                 clientMessage = Regex.Replace(clientMessage, @"\0", "");
                 ServerMessages.Add(clientMessage);
                 NotifyEvent?.Invoke(clientMessage);

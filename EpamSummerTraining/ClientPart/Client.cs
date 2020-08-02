@@ -5,6 +5,9 @@ using FourthTask.ClientPart.LanguageTranslator;
 
 namespace FourthTask.ClientPart
 {
+    /// <summary>
+    /// Represents the client interacting with the server.
+    /// </summary>
     public class Client
     {
         /// <summary>
@@ -20,7 +23,6 @@ namespace FourthTask.ClientPart
         public Client(string ip = "127.0.0.1", int port = 1)
         {
             TcpClient.Connect(ip, port);
-            // ClientConnectionStream = TcpClient.GetStream();
         }
 
         /// <summary>
