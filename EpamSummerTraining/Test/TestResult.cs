@@ -8,19 +8,19 @@ namespace ExerciseFirst.Test
     public class TestResult : IBinaryTreeElement<TestResult>
     {
         private protected int _studentNumber;
-        private protected double _mark;
+        private protected int _mark;
         private protected string _testName;
         private protected DateTime _dateОfСompletion;
 
-        public const double MIN_TEST_RESULT = 0.0;
-        public const double MAX_TEST_RESULT = 100.0;
+        public const int MIN_TEST_RESULT = 0;
+        public const int MAX_TEST_RESULT = 100;
         public const int MAX_TEST_NAME_LENGTH = 500;
         public static readonly DateTime MIN_TEST_DATE = new DateTime(1970, 1, 1, 0, 0, 0);
 
         public TestResult()
         { }
 
-        public TestResult(int studentNumber, string testName, DateTime dateOfCompletion, double mark)
+        public TestResult(int studentNumber, string testName, DateTime dateOfCompletion, int mark)
         {
             StudentNumber = studentNumber;
             TestName = testName;
@@ -47,7 +47,7 @@ namespace ExerciseFirst.Test
                 }
             }
         }
-        public double Mark
+        public int Mark
         {
             get
             {

@@ -1,13 +1,13 @@
 ﻿using ExerciseFirst.Test;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ExerciseFirst.Collection
 {
     public class BinaryTree<T> where T : TestResult, IBinaryTreeElement<T>, new()
     {
-
         public BinaryTree()
         { }
         public BinaryTree(T root)
@@ -108,7 +108,15 @@ namespace ExerciseFirst.Collection
             return startPoint;
         }
 
-        public void ToList(T element, ref List<T> allElements)
+        public List<T> ToList()
+        {
+            var list = new List<T>();
+            GetElementsFromTree(Root, ref list);
+            // list.Distinct();
+            return list;
+        }
+
+        private void GetElementsFromTree(T element, ref List<T> allElements)
         {
             if (element == null)
             {
@@ -119,8 +127,8 @@ namespace ExerciseFirst.Collection
             {
                 allElements.Add(element);
             }
-            ToList(element.Left as T, ref allElements);
-            ToList(element.Right as T, ref allElements);
+            GetElementsFromTree(element.Left as T, ref allElements);
+            GetElementsFromTree(element.Right as T, ref allElements);
         }
 
 
