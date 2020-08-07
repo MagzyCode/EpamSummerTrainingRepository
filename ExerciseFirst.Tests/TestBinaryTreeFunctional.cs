@@ -10,53 +10,62 @@ namespace ExerciseFirst.Tests
     [TestFixture]
     public class TestBinaryTreeFunctional
     {
-        [TestCase(10, ExpectedResult = 10)]
-        [TestCase(30, ExpectedResult = 30)]
-        public int TestBinaryTreeAddition(int numberOfElements)
+        private BinaryTree<Test.TestResult> _tree;
+        public const int TEST_NUMBER_OF_ELEMENTS = 15;
+
+        [SetUp]
+        public void Setup()
         {
-            var tree = new BinaryTree<Test.TestResult>();
-            for (int i = 0; i < numberOfElements; i++)
+            _tree = new BinaryTree<Test.TestResult>();
+            for (int i = 0; i < TEST_NUMBER_OF_ELEMENTS; i++)
             {
+
                 var test = new Test.TestResult()
                 {
-                    StudentNumber = new Random().Next(0, int.MaxValue),
+                    StudentNumber = new Random().Next(10 * i + 1, 10 * (i + 1)),
                     Mark = new Random().Next(Test.TestResult.MIN_TEST_RESULT, Test.TestResult.MAX_TEST_RESULT),
                     TestName = Guid.NewGuid().ToString(),
                     DateÎfÑompletion = DateTime.Now
                 };
-                tree.Add(test);
+                _tree.Add(test);
             }
-            
-            return tree.ToList().Count;
-
+        }
+        
+        [TestCase(/*10, */ExpectedResult = 15)]
+        //[TestCase(30, ExpectedResult = 30)]
+        //[TestCase(]
+        // [Test(ExpectedResult = 50)]
+        public int TestBinaryTreeAddition()
+        {
+            return _tree.ToList().Count;
         }
 
-        [TestCase(10, ExpectedResult = true)]
-        [TestCase(50, ExpectedResult = true)]
-        public bool TestBinaryTreeGetMinAndMax(int numberOfElements)
+        [TestCase(/*10, */ExpectedResult = true)]
+        //[TestCase(/*50, */ExpectedResult = true)]
+        // [Test(ExpectedResult = true)]
+        public bool TestBinaryTreeGetMinAndMax()
         {
-            var tree = new BinaryTree<Test.TestResult>();
-            for (int i = 0; i < numberOfElements; i++)
-            {
-                var test = new Test.TestResult()
-                {
-                    StudentNumber = new Random().Next(0, int.MaxValue),
-                    Mark = new Random().Next(Test.TestResult.MIN_TEST_RESULT, Test.TestResult.MAX_TEST_RESULT),
-                    TestName = Guid.NewGuid().ToString(),
-                    DateÎfÑompletion = DateTime.Now
-                };
-                tree.Add(test);
-            }
-            var min = tree.GetMin(tree.Root).StudentNumber;
-            var max = tree.GetMax(tree.Root).StudentNumber;
+            var min = _tree.GetMin(_tree.Root).StudentNumber;
+            var max = _tree.GetMax(_tree.Root).StudentNumber;
 
-            var minCor = tree.ToList().Select(i => i.StudentNumber).Min();
-            var maxCor = tree.ToList().Select(i => i.StudentNumber).Max();
+            var minCor = _tree.ToList().Select(i => i.StudentNumber).Min();
+            var maxCor = _tree.ToList().Select(i => i.StudentNumber).Max();
             if ((min == minCor) && (max == maxCor))
             {
                 return true;
             }
             return false;
+        }
+
+        [TestCase(ExpectedResult = 14)]
+        public int TestBinaryTreeRemove()
+        {
+            var randomNumber = new Random().Next(1, _tree.Count);
+            var getRandomElement = _tree.ToList().Skip(randomNumber).Take(1).ToList();
+            _tree.Remove(getRandomElement[0]);
+            return _tree.Count;
+            
+
         }
     }
 }

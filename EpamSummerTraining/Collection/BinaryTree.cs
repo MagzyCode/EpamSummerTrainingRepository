@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace ExerciseFirst.Collection
 {
@@ -17,6 +18,13 @@ namespace ExerciseFirst.Collection
 
         public T Root { get; private set; }
         public int Depth { get; }
+        public int Count
+        {
+            get
+            {
+                return ToList().Count;
+            }
+        }
 
         public void Add(T test)
         {
@@ -71,21 +79,21 @@ namespace ExerciseFirst.Collection
 
             if ((test.Left == null) && (test.Right == null))
             {
-                RemovePatherHeir(test);
-                return;
+                ChangePatherHeir(test);
             }
-
-            if ((test.Left != null) && (test.Right == null))
+            else if ((test.Left != null) && (test.Right == null))
             {
-                RemovePatherHeir(test, test.Left as T);
+                ChangePatherHeir(test, test.Left as T);
             }
             else if ((test.Left == null) && (test.Right != null))
             {
-                RemovePatherHeir(test, test.Right as T);
+                ChangePatherHeir(test, test.Right as T);
             }
             else
             {
-                // 
+                var newHeir = GetMin(test.Right as T);
+                ChangePatherHeir(newHeir, newHeir.Right as T);
+                ChangePatherHeir(test, newHeir);
             }
 
         }
@@ -126,7 +134,7 @@ namespace ExerciseFirst.Collection
             return list;
         }
 
-        private (T pather, BinaryTreeHeir typeOfHeir) RemovePatherHeir(T heir, T newHeir = null)
+        private (T pather, BinaryTreeHeir typeOfHeir) ChangePatherHeir(T heir, T newHeir = null)
         {
             var startPoint = Root;
             while (true)
