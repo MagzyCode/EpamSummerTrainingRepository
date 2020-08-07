@@ -69,20 +69,31 @@ namespace ExerciseFirst.Collection
                 throw new NullReferenceException("Значения для удаления не можеть быть null.");
             }
 
+            if ((test.Left == null) && (test.Right == null))
+            {
+                RemovePatherHeir(test);
+                return;
+            }
+
             if ((test.Left != null) && (test.Right == null))
             {
-
+                RemovePatherHeir(test, test.Left as T);
             }
             else if ((test.Left == null) && (test.Right != null))
             {
-
+                RemovePatherHeir(test, test.Right as T);
             }
+            else
+            {
+                // 
+            }
+
         }
 
         public void Rebalance()
         {
 
-        }
+        } // пусто
 
         public T GetMin(T treeRoot)
         {
@@ -92,7 +103,7 @@ namespace ExerciseFirst.Collection
             }
 
             T startPoint = treeRoot;
-            for (; startPoint.Left != null; startPoint = (T)startPoint.Left) ;
+            for (; startPoint.Left != null; startPoint = (T)startPoint.Left);
             return startPoint;
         }
 
@@ -104,7 +115,7 @@ namespace ExerciseFirst.Collection
             }
 
             T startPoint = treeRoot;
-            for (; startPoint.Right != null; startPoint = (T)startPoint.Right) ;
+            for (; startPoint.Right != null; startPoint = (T)startPoint.Right);
             return startPoint;
         }
 
@@ -112,8 +123,39 @@ namespace ExerciseFirst.Collection
         {
             var list = new List<T>();
             GetElementsFromTree(Root, ref list);
-            // list.Distinct();
             return list;
+        }
+
+        private (T pather, BinaryTreeHeir typeOfHeir) RemovePatherHeir(T heir, T newHeir = null)
+        {
+            var startPoint = Root;
+            while (true)
+            {
+                if ((startPoint.Left == heir) || (startPoint.Right == heir))
+                {
+                    if (startPoint > heir)
+                    {
+                        startPoint.Left = newHeir;
+                        return (startPoint, BinaryTreeHeir.Left);
+                    }
+                    else
+                    {
+                        startPoint.Right = newHeir;
+                        return (startPoint, BinaryTreeHeir.Right);
+                    }
+                    
+                }
+
+                if (startPoint > heir)
+                {
+                    startPoint = startPoint.Left as T;
+                }
+                else
+                {
+                    startPoint = startPoint.Right as T;
+                }
+            }
+        
         }
 
         private void GetElementsFromTree(T element, ref List<T> allElements)
