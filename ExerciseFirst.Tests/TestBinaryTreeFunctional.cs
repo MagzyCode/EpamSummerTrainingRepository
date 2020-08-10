@@ -22,7 +22,7 @@ namespace ExerciseFirst.Tests
 
                 var test = new Test.TestResult()
                 {
-                    StudentNumber = new Random().Next(10 * i + 1, 10 * (i + 1)),
+                    StudentNumber = i * 10 + 1,
                     Mark = new Random().Next(Test.TestResult.MIN_TEST_RESULT, Test.TestResult.MAX_TEST_RESULT),
                     TestName = Guid.NewGuid().ToString(),
                     DateŒf—ompletion = DateTime.Now
@@ -64,7 +64,20 @@ namespace ExerciseFirst.Tests
             var getRandomElement = _tree.ToList().Skip(randomNumber).Take(1).ToList();
             _tree.Remove(getRandomElement[0]);
             return _tree.Count;
-            
+        }
+
+        [TestCase(ExpectedResult = true)]
+        public bool TestBinatyTreeBalancing()
+        {
+            // var ass = _tree.GetDepth(_tree.Root.Right);
+            //var i = _tree.GetDepth(_tree.Root);
+            //var tmp = _tree.IsTreeBalanced(_tree);
+            // var i = _tree.GetBalanceFactor(_tree.Root);
+            // var root = _tree.Root;
+            _tree.Rebalance();
+            var i = _tree.GetBalanceFactor(_tree.Root);
+            // var result = _tree.IsTreeBalanced(_tree);
+            return i < 2;
 
         }
     }
