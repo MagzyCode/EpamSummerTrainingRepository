@@ -2,7 +2,6 @@ using ExerciseFirst.Collection;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System;
-using ExerciseFirst.Test;
 using System.Linq;
 
 namespace ExerciseFirst.Tests
@@ -19,7 +18,6 @@ namespace ExerciseFirst.Tests
             _tree = new BinaryTree<Test.TestResult>();
             for (int i = 0; i < TEST_NUMBER_OF_ELEMENTS; i++)
             {
-
                 var test = new Test.TestResult()
                 {
                     StudentNumber = i * 10 + 1,
@@ -31,18 +29,13 @@ namespace ExerciseFirst.Tests
             }
         }
         
-        [TestCase(/*10, */ExpectedResult = 15)]
-        //[TestCase(30, ExpectedResult = 30)]
-        //[TestCase(]
-        // [Test(ExpectedResult = 50)]
+        [TestCase(ExpectedResult = 15)]
         public int TestBinaryTreeAddition()
         {
             return _tree.ToList().Count;
         }
 
-        [TestCase(/*10, */ExpectedResult = true)]
-        //[TestCase(/*50, */ExpectedResult = true)]
-        // [Test(ExpectedResult = true)]
+        [TestCase(ExpectedResult = true)]
         public bool TestBinaryTreeGetMinAndMax()
         {
             var min = _tree.GetMin(_tree.Root).StudentNumber;
@@ -69,16 +62,31 @@ namespace ExerciseFirst.Tests
         [TestCase(ExpectedResult = true)]
         public bool TestBinatyTreeBalancing()
         {
-            // var ass = _tree.GetDepth(_tree.Root.Right);
-            //var i = _tree.GetDepth(_tree.Root);
-            //var tmp = _tree.IsTreeBalanced(_tree);
-            // var i = _tree.GetBalanceFactor(_tree.Root);
-            // var root = _tree.Root;
             _tree.Rebalance();
-            var i = _tree.GetBalanceFactor(_tree.Root);
-            // var result = _tree.IsTreeBalanced(_tree);
-            return i < 2;
+            var balanceFactor = _tree.GetBalanceFactor(_tree.Root);
+            return balanceFactor < 2;
+        }
 
+        [TestCase(ExpectedResult = 15)]
+        public int TestBinaryTreeSaveInFile()
+        {
+            _tree.SaveTreeToXmlFile();
+            var newTree = BinaryTree<Test.TestResult>.GetTreeFromFile();
+            return newTree.Count;
+        }
+
+        [TestCase(1, ExpectedResult = true)]
+        [TestCase(28, ExpectedResult = false)]
+        [TestCase(null, ExpectedResult = false)]
+        public bool TestBinarySearch(int studentNumber)
+        {
+            var required = _tree.BinarySearch(studentNumber);
+            if (required != null)
+            {
+                var result = required.StudentNumber == studentNumber;
+                return result;
+            }
+            return false;
         }
     }
 }

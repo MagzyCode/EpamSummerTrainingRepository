@@ -1,21 +1,38 @@
 ﻿using ExerciseFirst.Test;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace ExerciseFirst.Collection
 {
+    /// <summary>
+    /// A class that represents the binary 
+    /// tree data structure. Stores the test 
+    /// results of students.
+    /// </summary>
+    /// <typeparam name="T">
+    /// A class derived from TestResult and 
+    /// the IBinaryTreeElement interface. 
+    /// This is the result of testing students.
+    /// </typeparam>
     public class BinaryTree<T> where T : TestResult, IBinaryTreeElement<T>, new()
     {
+        /// <summary>
+        /// Root of the binary tree.
+        /// </summary>
         private T _root;
+
+        /// <summary>
+        /// Initializes a BinaryTree<T> object.
+        /// </summary>
         public BinaryTree()
         { }
-        public BinaryTree(T root)
-        {
-            Root = root;
-        }
 
+        /// <summary>
+        /// Represents a property for accessing 
+        /// the root of a binary tree.
+        /// </summary>
         public T Root
         {
             get
@@ -28,7 +45,19 @@ namespace ExerciseFirst.Collection
                 _root = value;
             }
         }
-        public int Depth { get; }
+        /// <summary>
+        /// Maximum level of the binary tree.
+        /// </summary>
+        public int Depth
+        {
+            get
+            {
+                return GetDepth(_root);
+            }
+        }
+        /// <summary>
+        /// The number of elements in the binary tree.
+        /// </summary>
         public int Count
         {
             get
@@ -37,12 +66,38 @@ namespace ExerciseFirst.Collection
             }
         }
 
+        /// <summary>
+        /// Brings the binary tree to a balanced view.
+        /// </summary>
+        public void Rebalance()
+        {
+            while (!IsTreeBalanced(_root))
+            {
+                GetRebalance(ref _root);
+            }
+
+        }
+        /// <summary>
+        /// Represents a binary tree as a list.
+        /// </summary>
+        /// <returns>
+        /// Returns a list of all elements in the binary tree.
+        /// </returns>
+        public List<T> ToList()
+        {
+            var allElements = new List<T>();
+            GetElementsFromTree(Root, ref allElements);
+            return allElements;
+        }
+        /// <summary>
+        /// Adds a new element to the binary tree.
+        /// </summary>
+        /// <param name="test">Test result.</param>
         public void Add(T test)
         {
             if (test == null)
             {
                 throw new NullReferenceException("Невозможно добавить null в бинарное дерево");
-                // return;
             }
 
             if (Root == null)
@@ -82,6 +137,54 @@ namespace ExerciseFirst.Collection
 
         }
 
+        /// <summary>
+        /// Search for testing by student number.
+        /// </summary>
+        /// <param name="studentNumber">The number of the student.</param>
+        /// <returns>The number of the student.</returns>
+        public T BinarySearch(int studentNumber)
+        {
+            var startPoint = _root;
+            while (true)
+            {
+                
+                if (startPoint == null)
+                {
+                    return null;
+                }
+
+                if (startPoint.StudentNumber > studentNumber)
+                {
+                    startPoint = startPoint.Left as T;
+                }
+                else if (startPoint.StudentNumber < studentNumber)
+                {
+                    startPoint = startPoint.Right as T;
+                }
+                else
+                {
+                    return startPoint;
+                }
+
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the difference in depths of subtrees.
+        /// </summary>
+        /// <param name="root">Tree root.</param>
+        /// <returns>The difference in depths of subtrees</returns>
+        public int GetBalanceFactor(T root)
+        {
+            var balanceFactor = Math.Abs(GetDepth(root.Right as T) - GetDepth(root.Left as T));
+            return balanceFactor;
+        }
+        /// <summary>
+        /// Deleting the test result 
+        /// from the binary tree.
+        /// </summary>
+        /// <param name="test">The test result to delete.</param>
         public void Remove(T test)
         {
             if (test == null)
@@ -111,180 +214,30 @@ namespace ExerciseFirst.Collection
             }
 
         }
-
-        //public BinaryTree<T> Rebalance()
-        //{
-        //    //if (IsTreeBalanced(this))
-        //    //{
-        //    //    return this;
-        //    //}
-
-        //    //var halfOfCount = Count / 2;
-        //    //List<T> sortedTree = ToList().OrderBy(i => i.StudentNumber).ToList();
-        //    //List<T> getFirstPart = sortedTree.GetRange(0, halfOfCount);
-        //    //getFirstPart.Reverse();
-        //    //List<T> getSecondPart = sortedTree.GetRange(halfOfCount, Count - halfOfCount);
-
-        //    //var newTree = new BinaryTree<T>();
-        //    //var maxHalf = Math.Max(getFirstPart.Count, getSecondPart.Count);
-        //    //for (int counter = 0; counter <= maxHalf; counter++)
-        //    //{
-        //    //    if ((counter == maxHalf - 1) && (getFirstPart.Count != getSecondPart.Count))
-        //    //    {
-        //    //        if (getFirstPart.Count > getSecondPart.Count)
-        //    //        {
-        //    //            newTree.Add(getFirstPart[counter]);
-        //    //        }
-        //    //        else
-        //    //        {
-        //    //            newTree.Add(getSecondPart[counter]);
-        //    //        }
-        //    //        break;
-        //    //    }
-
-        //    //    newTree.Add(getFirstPart[counter]);
-        //    //    newTree.Add(getSecondPart[counter]);
-        //    //}
-        //    //return newTree;
-        //}
-
-        public void Rebalance()
+        /// <summary>
+        /// Gets the maximum depth of the binary tree.
+        /// </summary>
+        /// <param name="root">Root of the binary tree.</param>
+        /// <returns>The depth of the tree.</returns>
+        public int GetDepth(T root)
         {
-            // var root = Root;
-            GetRebalance(ref _root);
-        }
-
-        private void GetRebalance(ref T root)
-        {
-            if (root != null)
+            if (root == null)
             {
-
-                var right = root.Right as T;
-                GetRebalance(ref right);
-                if (root != Root)
-                {
-                    root = BalanceTreeItem(/*ref */root);
-                }
-
-
-                var left = root.Left as T;
-                GetRebalance(ref left);
-                if (root == Root)
-                {
-                    root = BalanceTreeItem(/*ref */root);
-                }
-                
-                
-                
+                return 0;
             }
-
-            
+            return 1 + Math.Max(GetDepth(root.Left as T), GetDepth(root.Right as T));
         }
-
-        public int GetBalanceFactor(T root)
-        {
-            var balanceFactor = Math.Abs(GetDepth(root.Right as T) - GetDepth(root.Left as T));
-            return balanceFactor;
-        }
-
-        public void RorateRight(ref T root)
-        {
-            var oldRoot = root;
-            var newRoot = root.Left;
-            oldRoot.Left = newRoot.Right;
-            newRoot.Right = oldRoot;
-
-            var (pather, side) = GetPather(root);
-            if (side == BinaryTreeHeir.Left)
-            {
-                pather.Left = newRoot;
-            }
-            else if (side == BinaryTreeHeir.Right)
-            {
-                pather.Right = newRoot;
-            }
-            //newRoot.Right = oldRoot;
-
-            // root = newRoot;
-
-            ///////////////////////////////////////
-
-            //var newRoot = root.Left;
-            //// var lateRoot = root;
-            //root.Left = newRoot.Right;
-            //newRoot.Right = root;
-            //root = newRoot as T;
-            ////return temp;
-            ///////////////////////////////
-
-
-            //var oldRoot = root;
-            //var newRoot = root.Left;
-            //oldRoot.Left = newRoot.Right;
-
-            //var (pather, side) = GetPather(root);
-            //if (side == BinaryTreeHeir.Left)
-            //{
-            //    pather.Left = newRoot;
-            //}
-            //else if (side == BinaryTreeHeir.Right)
-            //{
-            //    pather.Right = newRoot;
-            //}
-            //newRoot.Right = oldRoot;
-
-            /////////////////////////////////////////
-            // root = newRoot as T;
-        }
-
-        public void RotateLeft(ref T root)
-        {
-            var oldRoot = root;
-            var newRoot = root.Right;
-            oldRoot.Right = newRoot.Left;
-            newRoot.Left = oldRoot;
-            // node = newRoot;
-            var (pather, side) = GetPather(root);
-            if (side == BinaryTreeHeir.Left)
-            {
-                pather.Left = newRoot;
-            }
-            else if (side == BinaryTreeHeir.Right)
-            {
-                pather.Right = newRoot;
-            }
-            /////////////////////////
-
-            //var oldRoot = root;
-            //var newRoot = root.Right;
-
-            //oldRoot.Right = newRoot.Left;
-            //newRoot.Left = root;
-            //root = newRoot as T;
-
-            ///////////////////////////////
-            //var oldRoot = root;
-            //var newRoot = root.Right;
-            //oldRoot.Right = newRoot.Left;
-            //// root = newRoot as T;
-            //var (pather, side) = GetPather(root);
-            //if (side == BinaryTreeHeir.Left)
-            //{
-            //    pather.Left = newRoot;
-            //}
-            //else if (side == BinaryTreeHeir.Right)
-            //{
-            //    pather.Right = newRoot;
-            //}
-            //newRoot.Left = oldRoot;
-
-            /////////////////////////////////////
-            // newRoot.Left = oldRoot;
-            // var copyOfNewRoot = newRoot as T;
-            // root = ref copyOfNewRoot;
-        }
-
-        public bool IsTreeBalanced(/*BinaryTree<T> element*/ T root)
+        /// <summary>
+        /// Checks the tree for balance.
+        /// </summary>
+        /// <param name="root">Root of the binary tree.</param>
+        /// <returns>
+        /// Returns true if the root subtrees differ 
+        /// by no more than 2 levels in depth, 
+        /// or if the root is equal to null. 
+        /// In all other cases, it returns false.
+        /// </returns>
+        public bool IsTreeBalanced(T root)
         {
             if (root == null)
             {
@@ -298,7 +251,11 @@ namespace ExerciseFirst.Collection
             }
             return false;
         }
-
+        /// <summary>
+        /// Gets the minimum element of the binary tree.
+        /// </summary>
+        /// <param name="treeRoot">Root of the binary tree.</param>
+        /// <returns>Returns the minimum element.</returns>
         public T GetMin(T treeRoot)
         {
             if (treeRoot == null)
@@ -307,10 +264,14 @@ namespace ExerciseFirst.Collection
             }
 
             T startPoint = treeRoot;
-            for (; startPoint.Left != null; startPoint = (T)startPoint.Left);
+            for (; startPoint.Left != null; startPoint = (T)startPoint.Left) ;
             return startPoint;
         }
-
+        /// <summary>
+        /// Gets the maximum element of the binary tree.
+        /// </summary>
+        /// <param name="treeRoot">Makes a turn to the right (left) of the tree around the node.</param>
+        /// <returns>Returns the maximum element.</returns>
         public T GetMax(T treeRoot)
         {
             if (treeRoot == null)
@@ -319,70 +280,112 @@ namespace ExerciseFirst.Collection
             }
 
             T startPoint = treeRoot;
-            for (; startPoint.Right != null; startPoint = (T)startPoint.Right);
+            for (; startPoint.Right != null; startPoint = (T)startPoint.Right) ;
             return startPoint;
         }
-
-        public List<T> ToList()
+        /// <summary>
+        /// Makes a turn to the right 
+        /// of the tree around the node.
+        /// </summary>
+        /// <param name="root">Makes a turn to the right (left) of the tree around the node.</param>
+        public void RotateRight(ref T root)
         {
-            var allElements = new List<T>();
-            GetElementsFromTree(Root, ref allElements);
-            return allElements;
+            var previousRoot = root;
+            var freshRoot = root.Left;
+            previousRoot.Left = freshRoot.Right;
+            freshRoot.Right = previousRoot;
+            root = freshRoot as T;
+
         }
-        
-        private T BalanceTreeItem(/*ref */T root)
+        /// <summary>
+        /// Makes a turn to the left
+        /// of the tree around the node.
+        /// </summary>
+        /// <param name="root">Makes a turn to the right (left) of the tree around the node.</param>
+        public void RotateLeft(ref T root)
         {
-            //var depthOfLeftTree = GetDepth(root.Left as T);
-            //var depthOfRightTree = GetDepth(root.Right as T);
-
-            //var 
-
-            if (!IsTreeBalanced(root))
+            var previousRoot = root;
+            var freshRoot = root.Right;
+            previousRoot.Right = freshRoot.Left;
+            freshRoot.Left = previousRoot;
+            root = freshRoot as T;
+        }
+        /// <summary>
+        /// Saves the binary tree to an xml file.
+        /// </summary>
+        /// <param name="path">Path to the saved file.</param>
+        public void SaveTreeToXmlFile(string path = @"tree.xml")
+        {
+            var xmlFormatter = new XmlSerializer(typeof(T));
+            using var stream = new FileStream(path, FileMode.OpenOrCreate);
+            xmlFormatter.Serialize(stream, _root);
+        }
+        /// <summary>
+        /// Retrieves a binary tree from an xml file.
+        /// </summary>
+        /// <param name="path">Path to the file to pull out.</param>
+        /// <returns>Returns a binary tree.</returns>
+        public static BinaryTree<T> GetTreeFromFile(string path = @"tree.xml")
+        {
+            var xmlFormatter = new XmlSerializer(typeof(T));
+            using var stream = new FileStream(path, FileMode.OpenOrCreate);
+            var root = xmlFormatter.Deserialize(stream) as T;
+            var tree = new BinaryTree<T>()
             {
-                var leftTreeDepth = GetDepth(root.Left as T);
-                var rightTreeDepth = GetDepth(root.Right as T);
-                if ((leftTreeDepth > rightTreeDepth) /*&& (root.Left != null)*/)
-                {
-                    RorateRight(ref root);
-                }
-                else if ((leftTreeDepth <= rightTreeDepth) /*&& (root.Right != null)*/)
-                {
-                    RotateLeft(ref root);
-                }
+                Root = root
+            };
+            return tree;
+        }
+
+        /// <summary>
+        /// Changes the root that has passed one balancing cycle.
+        /// </summary>
+        /// <param name="root">Root of the binary tree.</param>
+        private void GetRebalance(ref T root)
+        {
+            if (root == null)
+            {
+                return;
             }
 
-            return root;
-        }
+            var depthOfLeftTree = GetDepth(root.Left as T);
+            var depthOfRightTree = GetDepth(root.Right as T);
 
-        private (T, BinaryTreeHeir) GetPather(T heir)
-        {
-            var startPoint = Root;
-            while (true)
+            if (depthOfLeftTree > depthOfRightTree)
             {
-                if ((startPoint.Left == heir) || (startPoint.Right == heir))
-                {
-                    if (startPoint > heir)
-                    {
-                        return (startPoint, BinaryTreeHeir.Left);
-                    }
-                    else
-                    {
-                        return (startPoint, BinaryTreeHeir.Right);
-                    }
-
-                }
-
-                if (startPoint > heir)
-                {
-                    startPoint = startPoint.Left as T;
-                }
-                else
-                {
-                    startPoint = startPoint.Right as T;
-                }
+                RotateRight(ref _root);
+            }
+            else
+            {
+                RotateLeft(ref _root);
             }
         }
+        /// <summary>
+        /// Traverses all tree elements recursively 
+        /// and adds them to the list.
+        /// </summary>
+        /// <param name="element">The current element of the tree traversal.</param>
+        /// <param name="allElements">List of items.</param>
+        private void GetElementsFromTree(T element, ref List<T> allElements)
+        {
+            if (element == null)
+            {
+                return;
+            }
 
+            if (element != null)
+            {
+                allElements.Add(element);
+            }
+            GetElementsFromTree(element.Left as T, ref allElements);
+            GetElementsFromTree(element.Right as T, ref allElements);
+        }
+        /// <summary>
+        /// Replaces an element with a new one.
+        /// </summary>
+        /// <param name="heir">The element to replace.</param>
+        /// <param name="newHeir">The element with which to replace it.</param>
+        /// <param name="isTwoHeirs">Specified for complex replacements.</param>
         private void ChangePatherHeir(T heir, T newHeir = null, bool isTwoHeirs = false)
         {
             var startPoint = Root;
@@ -429,29 +432,9 @@ namespace ExerciseFirst.Collection
         
         }
 
-        private void GetElementsFromTree(T element, ref List<T> allElements)
-        {
-            if (element == null)
-            {
-                return;
-            }
+        
 
-            if (element != null)
-            {
-                allElements.Add(element);
-            }
-            GetElementsFromTree(element.Left as T, ref allElements);
-            GetElementsFromTree(element.Right as T, ref allElements);
-        }
-
-        public int GetDepth(T element)
-        {
-            if (element == null)
-            {
-                return 0;
-            }
-            return 1 + Math.Max(GetDepth(element.Left as T), GetDepth(element.Right as T));
-        }
+        
 
     }
 }
