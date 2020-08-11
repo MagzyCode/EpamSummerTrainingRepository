@@ -24,10 +24,10 @@ namespace ExerciseSecond
         public DateTime ThirdProperty { get; set; }
 
         /// <summary>
-        /// Compare objects using properties.
+        /// Compare objects by their properties.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">The object being compared.</param>
+        /// <returns>Returns true if the object.</returns>
         public override bool Equals(object obj)
         {
             return obj is SerializableClass @class &&

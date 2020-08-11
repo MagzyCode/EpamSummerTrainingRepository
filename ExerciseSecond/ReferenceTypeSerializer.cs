@@ -8,10 +8,11 @@ using System.Xml.Serialization;
 namespace ExerciseSecond
 {
     /// <summary>
-    /// Generic type for serializing any types 
+    /// The generic type for serialization 
+    /// of any reference types. 
     /// which realize interface ISerialize.
     /// </summary>
-    /// <typeparam name="T">Any class, which realize interface ISerialize.</typeparam>
+    /// <typeparam name="T">Any class that inherits an interface ISerialize.</typeparam>
     public class ReferenceTypeSerializer<T> where T : class, ISerialize<T>
     {
 
@@ -21,14 +22,14 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Value of serializable type.
+        /// Value of the serializable type.
         /// </summary>
         public T Value { get; set; }
 
         /// <summary>
-        /// Serialize value to binary format.
+        /// Serializing the value to binary format.
         /// </summary>
-        /// <param name="path">Path of saved file.</param>
+        /// <param name="path">Path to the saved file.</param>
         public void SerializeToBinaryFile(string path = "node.bin")
         {
             SaveVersion();
@@ -38,9 +39,9 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Serialize value to JSON format.
+        /// Serializing the value to JSON format.
         /// </summary>
-        /// <param name="path">Path of saved file.</param>
+        /// <param name="path">Path to the saved file.</param>
         public void SerializeToJson(string path = "node.json")
         {
             SaveVersion();
@@ -50,9 +51,9 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Serialize value to Xml format.
+        /// Serializing the value to XML format.
         /// </summary>
-        /// <param name="path">Path of saved file.</param>
+        /// <param name="path">Path to the saved file.</param>
         public void SerializeToXmlFile(string path = "node.xml")
         {
             SaveVersion();
@@ -64,9 +65,9 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Deserialize value from binary format.
+        /// Deserializing a binary file to a reference type.
         /// </summary>
-        /// <param name="path">File path with binary information.</param>
+        /// <param name="path">Path to the binary file.</param>
         /// <returns>Type value.</returns>
         public static T DeserializeFromBinaryFile(string path = "node.bin")
         {
@@ -84,9 +85,9 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Deserialize value from Json format.
+        /// Deserializing a JSON file to a reference type..
         /// </summary>
-        /// <param name="path">File path with Json information.</param>
+        /// <param name="path">Path to the JSON file.</param>
         /// <returns>Type value.</returns>
         public static T DeserializeFromJson(string path = "node.json")
         {
@@ -104,9 +105,9 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Deserialize value from Xml format.
+        /// Deserializing a XML file to a reference type..
         /// </summary>
-        /// <param name="path">File path with Xml information.</param>
+        /// <param name="path">Path to the XML file.</param>
         /// <returns>Type value.</returns>
         public static T DeserializeToXmlFile(string path = "node.xml")
         {
@@ -124,10 +125,11 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Serialize collection to binary format.
+        /// Serializing a collection of reference 
+        /// types to binary format.
         /// </summary>
-        /// <param name="collection">Saved collection.</param>
-        /// <param name="path">Path of saved file.</param>
+        /// <param name="collection">Serializable collection.</param>
+        /// <param name="path">Path to the saved file.</param>
         public static void SerializeCollectionToBinary(ICollection<T> collection, string path = "collection.bin")
         {
             SaveVersion();
@@ -137,9 +139,10 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Deserialize collection from binary format.
+        /// Deserializing a collection of reference 
+        /// types in binary format.
         /// </summary>
-        /// <param name="path">File path with binary information.</param>
+        /// <param name="path">Path to the binary file.</param>
         /// <returns>Collection value.</returns>
         public static ICollection<T> DeserializeCollectionFromBinary(string path = "collection.bin")
         {
@@ -157,10 +160,11 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Serialize collection to Json format.
+        /// Serializing a collection of reference 
+        /// types to JSON format.
         /// </summary>
-        /// <param name="collection">Saved collection.</param>
-        /// <param name="path">Path of saved file.</param>
+        /// <param name="collection">Serializable collection.</param>
+        /// <param name="path">Path to the saved file..</param>
         public static void SerializeCollectionToJson(ICollection<T> collection, string path = "collection.json")
         {
             SaveVersion();
@@ -173,9 +177,10 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Deserialize collection from Json format.
+        /// Deserializing a collection of reference 
+        /// types in JSON format.
         /// </summary>
-        /// <param name="path">File path with Json information.</param>
+        /// <param name="path">Path to the JSON file.</param>
         /// <returns>Collection value.</returns>
         public static ICollection<T> DeserializeCollectionFromJson(string path = "collection.json")
         {
@@ -193,10 +198,11 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Serialize collection to Xml format.
+        /// Serializing a collection of reference 
+        /// types to XML format.
         /// </summary>
-        /// <param name="collection">Saved collection.</param>
-        /// <param name="path">Path of saved file.</param>
+        /// <param name="collection">Serializable collection.</param>
+        /// <param name="path">Path to the saved file.</param>
         public static void SerializeCollectionToXml(ICollection<T> collection, string path = "collection.xml")
         {
             SaveVersion();
@@ -209,9 +215,10 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Deserialize collection from Xml format.
+        /// Deserializing a collection of reference 
+        /// types in XML format.
         /// </summary>
-        /// <param name="path">File path with Xml information.</param>
+        /// <param name="path">Path to the XML file.</param>
         /// <returns>Collection value.</returns>
         public static ICollection<T> DeserializeCollectionFromXml(string path = "collection.xml")
         {
@@ -229,10 +236,10 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Check correct version of type using AssemblyVersion.
+        /// Checking the type version after deserialization.
         /// </summary>
-        /// <param name="pathOfVersion">File this type version.</param>
-        /// <returns>Returns true if version is correct.</returns>
+        /// <param name="pathOfVersion">File with saving the type version.</param>
+        /// <returns>Returns true if the version.</returns>
         private static bool IsVersionValid(string pathOfVersion = "classVersion.txt")
         {
             using var reader = new StreamReader(pathOfVersion);
@@ -242,9 +249,9 @@ namespace ExerciseSecond
         }
 
         /// <summary>
-        /// Save version of savedType.
+        /// Saving version of the type.
         /// </summary>
-        /// <param name="path">File path for saving type version.</param>
+        /// <param name="path">File with the saved version of the</param>
         private static void SaveVersion(string path = "classVersion.txt")
         {
             using var writer = new StreamWriter(path);
