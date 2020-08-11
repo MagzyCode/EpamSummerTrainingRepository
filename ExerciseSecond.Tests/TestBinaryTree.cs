@@ -26,7 +26,7 @@ namespace ExerciseSecond.Tests
         {
             var serializer = new ReferenceTypeSerializer<SerializableClass>(_value);
             serializer.SerializeToBinaryFile();
-            var result = ReferenceTypeSerializer<SerializableClass>.DeserializeToBinaryFile();
+            var result = ReferenceTypeSerializer<SerializableClass>.DeserializeFromBinaryFile();
             return _value.Equals(result);
         }
 

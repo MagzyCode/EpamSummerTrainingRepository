@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace ExerciseSecond
 {
+    /// <summary>
+    /// Class for checking work of ReferenceTypeSerializer type.
+    /// </summary>
     [Serializable]
     public class SerializableClass : ISerialize<SerializableClass>
     {
@@ -20,6 +23,11 @@ namespace ExerciseSecond
         public int SecondProperty { get; set; }
         public DateTime ThirdProperty { get; set; }
 
+        /// <summary>
+        /// Compare objects using properties.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             return obj is SerializableClass @class &&
