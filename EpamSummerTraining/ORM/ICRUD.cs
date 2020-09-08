@@ -1,6 +1,8 @@
-﻿namespace EpamSummerTraining.ORM
+﻿using System.Collections.Generic;
+
+namespace EpamSummerTraining.ORM
 {
-    public interface ICRUD
+    public interface ICrud
     {
         void Create();
         void Read();

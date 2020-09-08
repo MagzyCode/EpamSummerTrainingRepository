@@ -4,10 +4,9 @@ namespace EpamSummerTraining.Entities
 {
     public class ExamResult : IDbMember
     {
-        // экзаменуемый
-        public Student Examinee { get; set; }
+        public int ExamineeId { get; set; }
 
-        public Subject Discipline { get; set; }
+        public string Discipline { get; set; }
 
         public int Mark { get; set; }
     }

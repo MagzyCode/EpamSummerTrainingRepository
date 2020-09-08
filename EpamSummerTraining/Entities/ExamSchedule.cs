@@ -5,10 +5,12 @@ namespace EpamSummerTraining.Entities
 {
     public class ExamSchedule : IDbMember
     {
-        public Group Group { get; set; }
+        public string GroupName { get; set; }
 
-        public Subject Discipline { get; set; }
+        public string Discipline { get; set; }
 
         public DateTime ExamDate { get; set; }
+
+        public string CheckingKnowledgeForm { get; set; }
     }
 }
