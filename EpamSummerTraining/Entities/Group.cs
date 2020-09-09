@@ -2,7 +2,7 @@
 
 namespace EpamSummerTraining.Entities
 {
-    public class Group : IDbMember
+    public class Group
     {
         public string GroupName { get; set; }
         public int GroupHeadId { get; set; }

@@ -2,7 +2,7 @@
 
 namespace EpamSummerTraining.Entities
 {
-    public class ExamResult : IDbMember
+    public class ExamResult
     {
         public int ExamineeId { get; set; }
 

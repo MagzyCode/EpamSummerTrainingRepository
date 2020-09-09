@@ -2,10 +2,10 @@
 
 namespace EpamSummerTraining.ORM
 {
-    public interface ICrud
+    public interface ICrud<T> where T : class
     {
         void Create();
-        void Read();
+        T Read();
         void Update();
         void Delete();
     }

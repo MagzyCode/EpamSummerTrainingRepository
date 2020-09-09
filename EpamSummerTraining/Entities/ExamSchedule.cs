@@ -3,7 +3,7 @@ using System;
 
 namespace EpamSummerTraining.Entities
 {
-    public class ExamSchedule : IDbMember
+    public class ExamSchedule
     {
         public string GroupName { get; set; }
 
