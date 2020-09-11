@@ -5,6 +5,8 @@ namespace EpamSummerTraining.Entities
 {
     public class ExamSchedule
     {
+        public int Id { get; set; }
+
         public string GroupName { get; set; }
 
         public string Discipline { get; set; }

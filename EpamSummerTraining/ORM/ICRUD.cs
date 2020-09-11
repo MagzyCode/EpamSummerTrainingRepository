@@ -6,7 +6,7 @@ namespace EpamSummerTraining.ORM
     {
         void Create();
         T Read();
-        void Update();
+        void Update(T newInstance);
         void Delete();
     }
 }

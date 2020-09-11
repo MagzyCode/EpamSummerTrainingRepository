@@ -12,71 +12,39 @@ namespace EpamSummerTraining.ORM
     public class DataAdapter<T> : ICrud<T>
         where T : class, new()
     {
-        private DataConnectionCreator _dataConnection;
+        private readonly DataConnectionCreator _dataConnection;
+        private readonly SqlScriptCreator<T> _sqlScriptCreator = new SqlScriptCreator<T>();
 
         public DataAdapter()
         {
             _dataConnection = DataConnectionCreator.GetConnection();
         }
 
-        private StringBuilder GetSqlCommand(Type type, CrudCommandEnum command)
+        private StringBuilder GetSqlCommand(CrudCommandEnum command, T newInstance = null)
         {
-            return command switch
+            var script = new StringBuilder();
+            switch (command)
             {
-                CrudCommandEnum.Create => GetCreateCommand(type),
-                CrudCommandEnum.Read => GetReadCommand(type),
-                CrudCommandEnum.Update => GetUpdateCommand(type),
-                CrudCommandEnum.Delete => GetDeleteCommand(type),
-                _ => throw new NotImplementedException()
+                case CrudCommandEnum.Create:
+                    _sqlScriptCreator.GetCreateScript(out script);
+                    break;
+                case CrudCommandEnum.Read:
+                    _sqlScriptCreator.GetReadScript();
+                    break;
+                case CrudCommandEnum.Update:
+                    _sqlScriptCreator.GetUpdateScript(newInstance, out script);
+                    break;
+                case CrudCommandEnum.Delete:
+                    _sqlScriptCreator.GetDeleteScript(newInstance, out script);
+                    break;
+                default: throw new NotImplementedException();
             };
-        }
-
-        private StringBuilder GetDeleteCommand(T deleted)
-        {
-            //var command = new StringBuilder();
-            //var primaryKey = typeof(T).GetProperties();
-            //command.Append($"DELETE FROM {typeof(T).Name} (\n");
-            // DELETE FROM TelephoneDictionary WHERE TelephoneNumber = '{0}'"
-            return default;
-        }
-
-        private StringBuilder GetUpdateCommand(Type type)
-        {
-            return default;
-        }
-
-        private StringBuilder GetReadCommand(Type type)
-        {
-            return default;
-        }
-
-        private StringBuilder GetCreateCommand(Type type)
-        {
-            var command = new StringBuilder();
-            command.Append($"CREATE TABLE {type.Name} (\n");
-            foreach (var item in type.GetProperties())
-            {
-                var typeOfProperty = item.PropertyType.ToString();
-                command.Append($"{item.Name} {typeOfProperty} NOT NULL,\n");
-            }
-            command.Append(");");
-            return command;
-        }
-
-        public string GetCorrectType(string type)
-        {
-            return type switch
-            {
-                "Int32" => "int",
-                "String" => "NVARCHAR(50)",
-                "DateTime" => "datetime",
-                _ => throw new NotImplementedException(),
-            };
+            return script;
         }
 
         public void Create()
         {
-            var script = GetSqlCommand(typeof(T), CrudCommandEnum.Create).ToString();
+            var script = GetSqlCommand(CrudCommandEnum.Create).ToString();
             _dataConnection.Connection.Open();
             var command = new SqlCommand(script, _dataConnection.Connection);
             command.ExecuteNonQuery();
@@ -85,7 +53,7 @@ namespace EpamSummerTraining.ORM
 
         public void Delete()
         {
-            var script = GetSqlCommand(typeof(T), CrudCommandEnum.Delete).ToString();
+            var script = GetSqlCommand(CrudCommandEnum.Delete).ToString();
             _dataConnection.Connection.Open();
             var command = new SqlCommand(script, _dataConnection.Connection);
             command.ExecuteNonQuery();
@@ -94,30 +62,34 @@ namespace EpamSummerTraining.ORM
 
         public T Read()
         {
-            var script = GetSqlCommand(typeof(T), CrudCommandEnum.Read).ToString();
+            T value = new T();
+            var script = GetSqlCommand(CrudCommandEnum.Read).ToString();
             _dataConnection.Connection.Open();
             var command = new SqlCommand(script, _dataConnection.Connection);
-            var value = command.ExecuteReader();
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    foreach (var item in typeof(T).GetProperties())
+                    {
+                        typeof(T).GetProperty(item.Name).SetValue(value, reader[item.Name]);
+                    }
+                }
+            }
+            reader.Close();
             _dataConnection.Connection.Close();
-
-            return null;
+            return value;
         }
 
-        //public IEnumerable<T> ReadAll()
-        //{
-        //    _dataConnection.Connection.Open();
-            
-        //    _dataConnection.Connection.Close();
-        //    return null;
-        //}
-
-        public void Update()
+        
+        public void Update(T newInstance)
         {
+            var script = GetSqlCommand(CrudCommandEnum.Update).ToString();
             _dataConnection.Connection.Open();
-            
+            var command = new SqlCommand(script, _dataConnection.Connection);
+            command.ExecuteNonQuery();
             _dataConnection.Connection.Close();
         }
-
-
     }
 }
